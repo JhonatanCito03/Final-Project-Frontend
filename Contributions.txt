@@ -1,0 +1,38 @@
+De parte de Jhonat4n
+
+
+Aqui van a ir todas las cosas que voy aprendiendo durante el desarrollo del frontend de Vuejs.
+
+1. Si un archivo no es importado en el main.js, este archivo sera global.
+2. Para poder traer un formulario o una vista de vue, podemos usar algo que se llama <slot>, lo cual desde otro archivo podemos llamar e interactuar con este mismo.
+Por ejemplo:
+Página de Países.vue ----> tiene un script en el cual creamos el enlace o importamos el formulario.vue, donde tenemos cierta informacion.
+Por otro lado, tenemos un componente dentro de la misma capeta donde tenemos Paises.vue, un componente llamado formPaises.vue, de tal manera que si importamos este acchivo estaria 
+trayendo 
+Solo la informacion de el formulario de los paises (formPaises) mientras que al llamar a formulario.vue, estamo haciendo un llamado a el componente que tiene el formulario general 
+que va a aparecer en cada instancia.
+
+
+3.Para poder agregar variables o valores interactivos en Vue, debemos importar el archivo de donde viene la variable, en este caso puede ser el Header.vue
+-Luego podemos crear un h2 dentro del header que reciba como valor la palabra 'nombre de la variable' que se llenara una vez validada en el modulo principal de paises, por ejemplo:
+-en el header, en el script con un setup, debemos poner
+
+<script setup>
+defineProps({
+  title: String,//aqui esta la variable que espera recibir un valor
+})
+</script>
+
+En la vista de Paises.vue, mandamos llamar el header con la variable
+ ----import Header from '../../components/Header.vue';----
+ En la vista de paises podemos poner el valor correspondiente de la variable.
+ <Header   
+    :title="'Módulo de Países'"
+    >
+</Header>
+De esta manera, para la vista Paises, el valor de el h2 llamado title, sera "modulo de paises"
+
+
+
+
+De parte del contribuidor (Fork).

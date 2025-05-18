@@ -1,0 +1,63 @@
+{
+  "tableData": [
+    {
+        "name": "Graciela Gonzalez",
+        "age": 33,
+        "globalScore": 209
+    },
+    {
+        "name": "Ricardo Martinez",
+        "age": 25,
+        "globalScore": 203
+    },
+    {
+        "name": "Julio Medina",
+        "age": 37,
+        "globalScore": 200
+    },
+    {
+        "name": "Roberto Alvarez",
+        "age": 28,
+        "globalScore": 192
+    },
+    {
+        "name": "Martín Flores",
+        "age": 55,
+        "globalScore": 144
+    },
+    {
+        "name": "Claudia Diaz",
+        "age": 60,
+        "globalScore": 100
+    },
+    {
+        "name": "Mirta Suarez",
+        "age": 40,
+        "globalScore": 150
+    },
+    {
+        "name": "Daniel Alvarez",
+        "age": 20,
+        "globalScore": 168
+    },
+    {
+        "name": "Juan Aguirre",
+        "age": 18,
+        "globalScore": 188
+    },
+    {
+        "name": "Alejandro Montoya",
+        "age": 49,
+        "globalScore": 201
+    },
+    {
+        "name": "Luz Mary Martinez",
+        "age": 49,
+        "globalScore": 300
+    }
+  ]
+}
+
+    
+
+      
