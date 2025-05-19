@@ -11,75 +11,162 @@
     label-width="auto"
     class="demo-ruleForm"
     >
-    <el-form-item label="Nombre" prop="age">
-    <el-input v-model.string="ruleForm.age" />
+    <el-form-item label="Cedula" prop="id">
+    <el-input v-model.string="ruleForm.id" />
     </el-form-item>
     <el-form-item label="Contraseña" prop="pass" >
       <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
     </el-form-item>
 
     <el-form-item style="margin-left: 70px; margin-right: auto; margin-top: 30px;">
-            <el-button type="primary" @click="submitForm(ruleFormRef), $router.push('/empleados') ">
+            <el-button type="primary" @click="submitForm(ruleFormRef)">
                 Ingresar
             </el-button>
             <el-button @click="resetForm(ruleFormRef)">Borrar</el-button>   
     </el-form-item>
   </el-form>
 </div>
-
-
-  <TMV/>
-
-
-
 </template>
 
 <script lang="ts" setup>
+import usuario from '../../userInfo'
+import { useRouter } from 'vue-router'
+import UserData from './../../userData.json'
 import { reactive, ref } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules} from 'element-plus'
+import {ElMessageBox} from 'element-plus'
+import userInfo from '../../userInfo'
 
 
+const router = useRouter()
 const ruleFormRef = ref<FormInstance>()
 
-const checkName = (rule: any, value: any, callback: any) => {
+
+//mensaje
+const dialogVisible = ref(false)
+
+//contador de veces
+let valorContador = reactive({
+  counter : 0
+}) 
+
+console.log('contador = '+ valorContador.counter)
+
+const handleClose = (done: () => void) => {
+  ElMessageBox.confirm('Estas seguro?')
+.then(() => {
+  done()
+})  
+.catch(() => {
+  // catch error
+})
+}
+//cuidado
+
+
+//Pruebas generales, no tomar en cuenta hasta que se haya comprobado
+
+const checkid = (rule: any, value: any, callback: any) => {
   if (!value) {
     return callback(new Error('Por favor ingrese su nombre'))
   }
+
+  const idExists = UserData.tableData.some(
+    (user: { id: string }) => user.id === value
+  )
+ 
+
+  if (!idExists) {
+    return callback(new Error('Nombre no encontrado en el sistema'))
+  }
+
+  callback()
 }
 
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === '') {
-    callback(new Error('Por favor ingrese una contraseña válida'))
-  } else {
-    if (ruleForm.checkPass !== '') {
-      if (!ruleFormRef.value) return
-      ruleFormRef.value.validateField('checkPass')
+   return callback(new Error('Por favor ingrese una contraseña'))
+  } 
+  const userExists = UserData.tableData.some(
+    (user: { id: string; password: string}) =>
+      user.id === ruleForm.id && user.password === value 
+    )
+    
+    if (!userExists) {
+      return callback(new Error('Contraseña incorrecta para el usuario ingresado'))
     }
-    callback()
-  }
+
+    return callback()
+  
+
 }
+//fin de las pruebas
+
+
 
 const ruleForm = reactive({
   pass: '',
   checkPass: '',
-  age: '',
+  name: '',
+  id: '',
+  rol:'',
+  message:'',
+  img:''
 })
 
 const rules = reactive<FormRules<typeof ruleForm>>({
   pass: [{ validator: validatePass, trigger: 'blur' }],
-  age: [{ validator: checkName, trigger: 'blur' }],
+  id: [{ validator: checkid, trigger: 'blur' }],
 })
 
+//caso de estudio
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
+
   formEl.validate((valid) => {
     if (valid) {
-      console.log('subido!')
+
+      const matchedUser = UserData.tableData.find(
+        (user: { id: string; password: string; name: string; rol:string;message:string;img:string }) =>
+          user.id === ruleForm.id && user.password === ruleForm.pass
+      )
+
+      if (matchedUser) {
+        ruleForm.name = matchedUser.name
+        ruleForm.rol = matchedUser.rol
+        ruleForm.message = matchedUser.message
+        ruleForm.img = matchedUser.img
+
+        userInfo.userInfo.id = ruleForm.id
+        userInfo.userInfo.name = ruleForm.name
+        userInfo.userInfo.img = ruleForm.img
+        userInfo.userInfo.message = ruleForm.message
+        userInfo.userInfo.rol = ruleForm.rol
+        userInfo.userInfo.password = ruleForm.pass
+      }
+      router.push('/empleados')
     } else {
-      console.log('error!')
+      if(valorContador.counter < 7){
+        ElMessageBox.alert('Nombre o contraseña inválidos', 'Error de autenticación', {
+        confirmButtonText: 'Aceptar',
+        type: 'error',
+      })
+      }
+      valorContador.counter += 1
+    }
+
+    if (valorContador.counter === 7) {
+      ElMessageBox.alert('Usted ha sido bloqueado de nuestro sistema', 'Debe comunicarse al 3113353728', {
+        confirmButtonText: 'Confirmar',
+        type: 'error',
+      }).then(() => {
+        router.push('/report')
+      })
     }
   })
 }
+//caso de estudio
+
 
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return

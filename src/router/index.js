@@ -4,6 +4,7 @@ import Empleados from '../views/Empleados/Empleados.vue';
 import LayoutMain from '../components/LayoutMain.vue';
 import Login from '../components/Login.vue';
 import versions from '../views/version/versiones.vue';
+import blank from '../components/users/blankdoc.vue';
 import Navbar from '../components/Navbar.vue';
 import Paises from '../views/Paises/Paises.vue';
 import Cargos from '../views/Cargos/Cargos.vue';
@@ -23,6 +24,11 @@ const routes = [
         path:'/',
         name: 'home',
         component:Login
+    },
+    {
+        path:'/report',
+        name: 'blank',
+        component:blank
     },
     {
         path:'/versions',

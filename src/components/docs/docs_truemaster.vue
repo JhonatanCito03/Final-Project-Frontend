@@ -1,13 +1,8 @@
 <template>
-    <div>
-
-    </div>
+    <button>Click aqui</button>
 </template>
 
 <script>
-    export default {
-        
-    }
 </script>
 
 <style scoped>
