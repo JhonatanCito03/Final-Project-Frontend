@@ -3,11 +3,38 @@
       :default-active="$route.path"
       router
       class="el-menu-vertical-demo"
-          active-text-color="yellow"
-          background-color="#13161c"
-          text-color="white"
+      background-color="#13161c"
+      text-color="white"
         >
       <!--- Esta es la parte correspondiente a el primer sidebar ---->
+      <el-sub-menu index="0">
+          <template #title>
+            <el-icon><Histogram /></el-icon>
+            <span>Estadisticas</span>
+          </template>
+
+          <el-sub-menu index="0-1">
+            <template #title>
+            <span><el-icon><User /></el-icon>Personales</span>
+            </template>
+            <el-menu-item index="/"><el-icon><Money/></el-icon>Metas de captación</el-menu-item>
+            <el-menu-item index="/"><el-icon><Connection/></el-icon>Metas de colocación</el-menu-item>
+            <el-menu-item index="/"><el-icon><Stamp/></el-icon> Metas clasificación mixta</el-menu-item>
+          </el-sub-menu>
+
+          <el-sub-menu index="0-2">
+            <template #title>
+            <span><el-icon><Place/></el-icon>Generales</span>
+            </template>
+            <el-menu-item index="/"><el-icon><Money/></el-icon>Metas de captación nivel.{{ userInfo.userInfo.region }}</el-menu-item>
+            <el-menu-item index="/"><el-icon><Connection/></el-icon>Metas de colocación nivel.{{ userInfo.userInfo.region }}</el-menu-item>
+            <el-menu-item index="/"><el-icon><Stamp/></el-icon> Metas clasificación mixta nivel.{{ userInfo.userInfo.region }}</el-menu-item>
+          </el-sub-menu>
+
+
+        </el-sub-menu>
+
+
         <el-sub-menu index="1">
           <template #title>
             <el-icon><User /></el-icon>
@@ -70,7 +97,8 @@
 </template>
 
 <script lang="ts" setup>
-import {User,DataLine,List,Search,Tools,EditPen,Crop} from '@element-plus/icons-vue'
+import {User,DataLine,List,Search,Tools,EditPen,Crop,Histogram,Stamp,Connection,Money,Place} from '@element-plus/icons-vue'
+import userInfo from '../../userInfo'
 
 </script>
 

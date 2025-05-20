@@ -5,7 +5,8 @@ export default {
         password : '',
         rol:'',
         message:'',
-        img:''
+        img:'',
+        region:''
     }
         
 }

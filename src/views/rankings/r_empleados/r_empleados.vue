@@ -1,6 +1,18 @@
-<template>
-  <LayoutMain #slotLayout>
+<script setup>
+import LayoutMain from '../../../components/LayoutMain.vue';
+import usersJSON from '../../../../userData.json'
+    const tableData = usersJSON.tableData
+    console.log(tableData)
+
+    const sortedByScore = [...tableData].sort((a, b) => b.globalScore - a.globalScore)
+    const top3Scores = [...new Set(sortedByScore.map(emp => emp.globalScore))].slice(0, 3)
+    const top3Employees = tableData.filter(emp => top3Scores.includes(emp.globalScore))
     
+</script>
+
+
+<template>
+<LayoutMain #slotLayout>
     <h2 style="text-align: center;"><strong>Ranking Empleados</strong></h2>
     <hr>
     <div style="margin-top: 50px; ">
@@ -20,19 +32,7 @@
         <el-table-column prop="globalScore" label="Puntuacion global del empleado:" />
         </el-table>
     </div>
-  </LayoutMain>
+</LayoutMain>
+
 </template>
 
-<script setup>
-import LayoutMain from '../../../components/LayoutMain.vue';
-import TMV from '../../version/versiones.vue';
-import usersJSON from '../../../../userData.json'
-
-    const tableData = usersJSON.tableData
-    console.log(tableData)
-
-    const sortedByScore = [...tableData].sort((a, b) => b.globalScore - a.globalScore)
-    const top3Scores = [...new Set(sortedByScore.map(emp => emp.globalScore))].slice(0, 3)
-    const top3Employees = tableData.filter(emp => top3Scores.includes(emp.globalScore))
-    
-</script>

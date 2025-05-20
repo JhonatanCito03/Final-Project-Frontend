@@ -8,7 +8,8 @@
         "password": "3332383728",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":"http://imgfz.com/i/6sQZknL.jpeg"
+        "img":"http://imgfz.com/i/6sQZknL.jpeg",
+        "region":"Antioquia"
     },
     {
         "id": "1820309060",
@@ -18,7 +19,8 @@
         "password": "",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Caribe"
     },
     {
         "id": "1020309060",
@@ -28,7 +30,8 @@
         "password": "",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Cundinamarca"
     },
     {
         "id": "1030900020",
@@ -37,7 +40,8 @@
         "globalScore": 192,
         "password": "","rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Andina"
     },
     {
         "id": "1124306590",
@@ -46,7 +50,8 @@
         "globalScore": 144,
         "password": "","rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Antioquia"
     },
     {
         "id": "1010508530",
@@ -55,7 +60,8 @@
         "globalScore": 100,
         "password": "","rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Antioquia"
     },
     {
         "id": "1220405990",
@@ -65,7 +71,8 @@
         "password": "",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Antioquia"
     },
     {
         "id": "1021395597",
@@ -75,7 +82,8 @@
         "password": "",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Antioquia"
     },
     {
         "id": "1075385490",
@@ -85,7 +93,8 @@
         "password": "",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":""
+        "img":"",
+        "region":"Antioquia"
     },
     {
         "id": "71800923",
@@ -95,7 +104,8 @@
         "password": "A71800923e",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":"http://imgfz.com/i/W0xw4hL.jpeg"
+        "img":"http://imgfz.com/i/W0xw4hL.jpeg",
+        "region":"Caribe"
     },
     {
         "id": "21769953",
@@ -105,7 +115,8 @@
         "password": "L21769953*",
         "rol":"Asesor de oficina",
         "message":"profesional encargado de brindar atención al cliente, gestionar documentación y ofrecer soporte administrativo dentro de una empresa. Sus principales funciones incluyen atender consultas de los usuarios de forma cordial y eficiente, orientar sobre productos o servicios, procesar solicitudes o trámites, mantener actualizados los registros, y apoyar en la organización interna del lugar de trabajo.",
-        "img":"http://imgfz.com/i/23MmjW1.jpeg"
+        "img":"http://imgfz.com/i/23MmjW1.jpeg",
+        "region":"Cundinamarca"
     }
   ]
 }

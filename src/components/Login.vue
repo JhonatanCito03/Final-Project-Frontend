@@ -1,41 +1,75 @@
 <template>
-<h3 style="text-align: center; font-size: 100px;">BIENVENIDO A</h3>
-<h2 style="text-align: center; font-size: 100px; margin-top: -145px;">TRUEMASTER</h2>
+  <div>
+    <!--Loader-->
+    <about_ v-if="showLoader"/>
 
-<div style="display: flex; justify-content: center;align-items: center;">
-<el-form 
-    ref="ruleFormRef"
-    :model="ruleForm"
-    status-icon
-    :rules="rules"
-    label-width="auto"
-    class="demo-ruleForm"
-    >
-    <el-form-item label="Cedula" prop="id">
-    <el-input v-model.string="ruleForm.id" />
-    </el-form-item>
-    <el-form-item label="Contraseña" prop="pass" >
-      <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
-    </el-form-item>
+    <div v-else>
+    <h3 style="text-align: center; font-size: 100px;">BIENVENIDO A</h3>
+    <h2 style="text-align: center; font-size: 100px; margin-top: -145px;">TRUEMASTER</h2>
 
-    <el-form-item style="margin-left: 70px; margin-right: auto; margin-top: 30px;">
-            <el-button type="primary" @click="submitForm(ruleFormRef)">
-                Ingresar
-            </el-button>
-            <el-button @click="resetForm(ruleFormRef)">Borrar</el-button>   
-    </el-form-item>
-  </el-form>
-</div>
+    <div style="display: flex; justify-content: center;align-items: center;">
+    <el-form 
+        ref="ruleFormRef"
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        label-width="auto"
+        class="demo-ruleForm"
+        >
+        <el-form-item label="Cedula" prop="id">
+        <el-input v-model.string="ruleForm.id" />
+        </el-form-item>
+        <el-form-item label="Contraseña" prop="pass" >
+          <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
+        </el-form-item>
+
+        <el-form-item style="margin-left: 70px; margin-right: auto; margin-top: 30px;">
+                <el-button type="primary" @click="submitForm(ruleFormRef)">
+                    Ingresar
+                </el-button>
+                <el-button @click="resetForm(ruleFormRef)">Borrar</el-button>   
+        </el-form-item>
+      </el-form>
+    </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import usuario from '../../userInfo'
 import { useRouter } from 'vue-router'
-import UserData from './../../userData.json'
-import { reactive, ref } from 'vue'
+import UserData from '../../userData.json'
+import { onMounted, reactive, ref } from 'vue'
 import type { FormInstance, FormRules} from 'element-plus'
 import {ElMessageBox} from 'element-plus'
 import userInfo from '../../userInfo'
+import about_ from './docs/docs_truemaster.vue'
+
+
+// App.vue o cualquier componente
+import Lenis from '@studio-freight/lenis'
+
+
+    onMounted(() => {
+      const lenis = new Lenis()
+
+      function raf(time: number) {
+        lenis.raf(time)
+        requestAnimationFrame(raf)
+      }
+
+      requestAnimationFrame(raf)
+    })
+
+
+
+const showLoader = ref(true)
+
+onMounted(() => {
+  setTimeout(() => {
+    showLoader.value = false
+  }, 4200);
+})
 
 
 const router = useRouter()
@@ -111,7 +145,8 @@ const ruleForm = reactive({
   id: '',
   rol:'',
   message:'',
-  img:''
+  img:'',
+  region:''
 })
 
 const rules = reactive<FormRules<typeof ruleForm>>({
@@ -127,7 +162,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
 
       const matchedUser = UserData.tableData.find(
-        (user: { id: string; password: string; name: string; rol:string;message:string;img:string }) =>
+        (user: { id: string; password: string; name: string; rol:string;message:string;img:string; region:string }) =>
           user.id === ruleForm.id && user.password === ruleForm.pass
       )
 
@@ -136,10 +171,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
         ruleForm.rol = matchedUser.rol
         ruleForm.message = matchedUser.message
         ruleForm.img = matchedUser.img
+        ruleForm.region = matchedUser.region
 
         userInfo.userInfo.id = ruleForm.id
         userInfo.userInfo.name = ruleForm.name
         userInfo.userInfo.img = ruleForm.img
+        userInfo.userInfo.region = ruleForm.region
         userInfo.userInfo.message = ruleForm.message
         userInfo.userInfo.rol = ruleForm.rol
         userInfo.userInfo.password = ruleForm.pass
@@ -176,6 +213,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 </script>
 
-<style>
-
+<style scoped>
+html, body {
+  height: 100%;
+  overflow: hidden; /* importante para que lenis controle el scroll */
+}
 </style>
