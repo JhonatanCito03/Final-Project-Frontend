@@ -37,7 +37,7 @@
       </el-sub-menu>
 
       <el-sub-menu index="3" id="sub3">
-        <template #title><el-icon><user/></el-icon>{{ userInfo.userInfo.name }}</template>
+        <template v-if="userInfo.userInfo.name !== ''" #title><el-icon><user/></el-icon>Saludos, {{ primerNombre }}</template>
         <div id="editable2">
         <el-menu-item id="navbarIcon1" index="2-1" @click="mensajebf"><el-icon><user/></el-icon>Perfil</el-menu-item>
         <el-menu-item id="navbarIcon2" index="2-2"><el-icon><BellFilled/></el-icon>Reporte de bugs</el-menu-item>
@@ -55,6 +55,39 @@
   import { Menu as IconMenu, User, BellFilled, Close,Document,HomeFilled} from '@element-plus/icons-vue'
   import {ElMessageBox} from 'element-plus'
   import { useRouter } from 'vue-router'
+
+  const errorMsg = ()=>{
+  ElMessageBox.alert(   
+    `Parece que no se pueden cargar los datos de esta sesión, por favor vuelva a intentarlo.?`,
+    'LogIn{ERROR}',
+    {
+      confirmButtonText: 'Confirmar',
+      dangerouslyUseHTMLString: true,
+      type: 'warning',
+    }
+  ).then(() => {
+    router.push('/')
+  }) 
+  }
+
+
+ let usuarios = [{name:userInfo.userInfo.name}]
+ let primerNombre = ''
+  console.log(usuarios)
+
+  if(usuarios[0]["name"] !== ''){
+    let valor = usuarios.map(user => {
+      const partesNombre = user.name.split(" ")
+      return partesNombre.slice(0,2).join(" ")
+    })
+    primerNombre = valor[0]
+    console.log(primerNombre)
+  }
+  else{
+    console.log('error inesperado')
+    errorMsg()
+  }
+
 
 const router = useRouter()
 
@@ -101,7 +134,7 @@ ElMessageBox.confirm(
     router.push('/')
   }) 
   }
-    
+     
 
   const activeIndex = ref('1')
   const handleSelect = (key: string, keyPath: string[]) => {

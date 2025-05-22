@@ -17,9 +17,9 @@
             <template #title>
             <span><el-icon><User /></el-icon>Personales</span>
             </template>
-            <el-menu-item index="/"><el-icon><Money/></el-icon>Metas de captación</el-menu-item>
-            <el-menu-item index="/"><el-icon><Connection/></el-icon>Metas de colocación</el-menu-item>
-            <el-menu-item index="/"><el-icon><Stamp/></el-icon> Metas clasificación mixta</el-menu-item>
+            <el-menu-item index="/metas?captacion_index"><el-icon><Money/></el-icon>Metas de captación</el-menu-item>
+            <el-menu-item index="/metas?colocacion_index"><el-icon><Connection/></el-icon>Metas de colocación</el-menu-item>
+            <el-menu-item index="/metas?mixtas_index"><el-icon><Stamp/></el-icon> Metas clasificación mixta</el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="0-2">

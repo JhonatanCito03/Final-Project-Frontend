@@ -13,6 +13,9 @@ import Municipios from '../views/municipios/municipios.vue';
 import Dptos from '../views/dptos/dptos.vue';
 import docs_truemaster from '../components/docs/docs_truemaster.vue';
 import animaciones from '../components/docs/animaciones.vue';
+import metas_captacion from '../views/estadisticas_metas/metas_personales/personal_captacion.vue'
+import metas_colocacion from '../views/estadisticas_metas/metas_personales/personal_colocacion.vue'
+import metas_mixtas from '../views/estadisticas_metas/metas_personales/personal_mixto.vue'
 
 
 import r_empleados from '../views/rankings/r_empleados/r_empleados.vue';
@@ -72,6 +75,21 @@ const routes = [
         path:'/departamentos',
         name: 'departamentos',
         component:Dptos
+    },
+    {
+        path:'/metas_captacion_index',
+        name: 'metas_captacion',
+        component:metas_captacion
+    },
+    {
+        path:'/metas_colocacion_index',
+        name: 'metas_colocacion',
+        component:metas_colocacion
+    },
+    {
+        path:'/metas_mixtas_index',
+        name: 'metas_mixtas',
+        component:metas_mixtas
     },
     {
         path:'/r_empleados',

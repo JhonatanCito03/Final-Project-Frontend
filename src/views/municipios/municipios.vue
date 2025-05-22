@@ -20,10 +20,10 @@
             
         </formulario>
 
-              <el-table :data="tableData" stripe style="width: 100%;">
-                  <el-table-column prop="name" label="Nombre" width="180"/>
-                  <el-table-column prop="address" label="Dirección" width="180" />
-                  <el-table-column prop="phone" label="Teléfono" />
+              <el-table :data="userData.tableData" stripe style="width: 100%;">
+                  <el-table-column prop="id" label="id Usuario" width="180"/>
+                  <el-table-column prop="name" label="Nombre" width="180" />
+                  <el-table-column prop="globalScore" label="globalScore" />
                   <el-table-column fixed="right" label="Acciones" min-width="120">
                     <template #default>
                     <el-button link type="primary" size="large" :icon="Edit" @click="editarFormulario" >                  
@@ -45,6 +45,7 @@
   import FormularioMunicipios from "./components/formMunicipios.vue"
   import Header from '../../components/Header.vue';
   import {Delete,Edit, Loading} from "@element-plus/icons-vue"
+  import userData from '../../../userData.json'
 
   const mostrarFormulario = ref(false)
   const editandoFormulario = ref(false)
@@ -57,14 +58,6 @@
     mostrarFormulario.value=true
     editandoFormulario.value=true
   }
-
-const tableData = [
-{
-  name: 'none',
-  address: 'none',
-  phone: 'none',
-},
-]
 </script>
 
 <style scoped>

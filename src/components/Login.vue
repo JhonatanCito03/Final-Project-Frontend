@@ -45,7 +45,6 @@ import {ElMessageBox} from 'element-plus'
 import userInfo from '../../userInfo'
 import about_ from './docs/docs_truemaster.vue'
 
-
 // App.vue o cualquier componente
 import Lenis from '@studio-freight/lenis'
 

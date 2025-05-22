@@ -25,24 +25,12 @@
 </template>
 
 <script>
-import { VueLenis, useLenis } from 'lenis/vue'
 import { watch } from 'vue'
 import {CaretTop} from '@element-plus/icons-vue'
 
 export default {
   name:'about_'
 }
-function scrollToTop() {
-  lenis.value.scrollTo(0, { duration: 1.5 })
-}
-
-const lenis = useLenis(({ scroll }) => {
-  console.log('Scroll position:', scroll)
-})
-
-watch(lenis, (lenis) => {
-  // lenis instance
-})
 
 </script>
 
