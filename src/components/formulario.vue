@@ -1,97 +1,43 @@
 <template>
-    <el-container v-show="isVisible" class="form-container">
-      <el-row :gutter="5" class="form-container__row">
-        <el-col :xs="18" :sm="18" :md="18" :lg="22" :xl="22" class="form-container__title-col">
-          <el-button text class="form-container__title-button" size="large">
-            {{ titulo }}
-          </el-button>
-        </el-col>
-        <el-col :xs="6" :sm="6" :md="6" :lg="2" :xl="2" class="form-container__button-group">
-          <el-button size="large" class="form-container__button-cancel" @click="irAtras">Cancelar</el-button>
-          <el-button color="#8000ff" size="large" class="form-container_button-submit" @click="submit" >{{tituloBoton}}</el-button>
-          
-        </el-col>
-      </el-row>
+  <el-drawer v-model="drawerStore.showDrawer" title="Modulo" :with-header="false">
+    <div class="container">
+    <span>Modulo: Nuevo {{ drawerTitle }}</span>
+    <div class="buttons">
+      <el-button style="margin-left: 5px;">Cancelar</el-button>
+      <el-button 
+      style="
+      background-color: #8000ff;
+      color: aliceblue;
+      "
+      >Crear {{ drawerTitle }}</el-button>
+    </div>
+    </div>
+    <keep-alive>
+    <el-main class="main-content">
+                <slot name="slotForm_drawer"></slot>
+    </el-main>
+    </keep-alive>
+  </el-drawer>
   
-      <el-main class="form-container__main">
-        <slot name="slotForm"></slot>
-      </el-main>
-    </el-container>
-  </template>
-  
-  <script setup>
+</template>
 
-  import { computed } from 'vue';
-  
-  const propiedad = defineProps({
-    titulo: String,
-    isEdit: Boolean,
-    isOpen: Boolean,
-  });
-  
-  console.log(propiedad.isEdit)
-  const tituloBoton = computed(()=>(propiedad.isEdit ? 'Actualizar': 'Guardar'))
-  
-  const isVisible = computed(() => propiedad.isOpen);
-  
-  const $emit = defineEmits(['update:is-open','save' ,'update:is-edit']);
-  
-  const irAtras = ()  => {
-    $emit('update:is-open', false);
-  };
-  
-  const submit=()=>{
-    if(propiedad.isEdit){
-      $emit('update')
-    }else{
-      $emit('save')
-    }
-  }
-  
-  </script>
-  
-  <style scoped>
-  .form-container {
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 5px;
-    width: 100%;
-    z-index: 90;
-    background-color: rgb(255, 255, 255);
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh + 42%);
-  }
-  
-  
-  
-  .form-container__row {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  /* estilos del titulo delformulario  */
-  .form-container__title-button {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  
-  /* alinear los botones en la parte soperior derecha */
-  .form-container__button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-  
-  .form-container__button-submit {
-    background-color: #ffffff;
-    border: none;
-    color: white;
-  }
-  
-  
-  </style>
+<script setup>
+import {useDrawerStore} from '@/components/stores/useDrawerStore'
+const drawerStore = useDrawerStore()
+const propiedad = defineProps({
+  drawerTitle: String,
+})
+</script>
+
+<style scoped>
+.el-drawer .el-button{
+  color: rgb(0, 0, 0);
+}
+.container{
+  text-align: center;
+}
+.buttons{
+  margin-top: 5px;
+}
+
+</style>

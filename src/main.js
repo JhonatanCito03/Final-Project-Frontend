@@ -7,10 +7,11 @@ import App from '../App.vue'
 import router from './router'
 import axios from 'axios'
 import PrimeVue from 'primevue/config';
-import Aura from '@primeuix/themes/aura';
+import { createPinia } from 'pinia'
 
 const app = createApp(App)
 app.use(LenisVue)
+app.use(createPinia())
 app.use(ElementPlus)
 app.use(router)
 app.mount('#app')

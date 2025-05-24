@@ -1,6 +1,8 @@
 <script setup>
+
 import Navbar from '../components/Navbar.vue';
 import Sidebar from '../components/SidebarMenu.vue';
+import Statistic_ from './users/Statistic_.vue';
 
 import {CaretTop} from '@element-plus/icons-vue'
 
@@ -13,11 +15,9 @@ function scrollToTop() {
 }
 
 const lenis = useLenis(({ scroll }) => {
-  console.log('Scroll position:', scroll)
 })
 
 watch(lenis, (lenis) => {
-  // lenis instance
 })
 
 </script >
@@ -37,6 +37,7 @@ watch(lenis, (lenis) => {
                 <Sidebar></Sidebar>
             </el-aside>
             <el-main class="main-content">
+                <Statistic_/>
                 <slot name="slotLayout">
                 </slot>
                 <el-button @click="scrollToTop" type="info" :icon="CaretTop" circle />

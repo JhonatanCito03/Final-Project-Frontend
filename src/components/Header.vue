@@ -5,7 +5,7 @@
         <h2 class="container_title">Módulo de {{ titulo }}</h2>
 
       <el-row justify="center">
-        <el-button type="primary" @click="abrir" class="padded-button">{{ tituloBoton  }}</el-button>
+        <el-button type="primary" @click="openDrawer" class="padded-button">{{ tituloBoton  }}</el-button>
       </el-row>
       
       </div>
@@ -14,13 +14,17 @@
 </template>
 
 <script setup>
+import {useDrawerStore} from '@/components/stores/useDrawerStore'
+const drawerStore = useDrawerStore()
+
+
+const openDrawer = () => {
+  drawerStore.openDrawer()
+}
+
 defineProps({
   titulo: {String, required: true},
-  tituloBoton:{String, required: true},
-  abrir:{
-    type:Function,
-    required:true
-  }
+  tituloBoton:{String, required: true}
 })
 
 </script>
