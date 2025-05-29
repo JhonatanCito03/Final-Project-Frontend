@@ -1,230 +1,390 @@
 <template>
-  <div class="container">
-    <el-form
+  <el-form
+    v-loading="loading"
     ref="ruleFormRef"
-    style="max-width: 600px; "
+    style="max-width: 600px"
     :model="ruleForm"
+    status-icon
     :rules="rules"
     label-width="auto"
+    class="demo-ruleForm"
   >
 
-    <el-form-item label="Nombre Completo" prop="name">
-      <el-input v-model="ruleForm.name" />
+  <div class="container">
+    <el-upload
+  v-model:file-list="fileList"
+  list-type="picture-card"
+  :auto-upload="false"
+  :limit="1"
+  :on-change="handleFileChange"
+  :on-exceed="handleExceed"
+  accept="image/*"
+  >
+      <el-icon><Plus /></el-icon>
+  
+      <template #file="{ file }">
+        <div>
+          <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+          <span class="el-upload-list__item-actions">
+            <span
+              class="el-upload-list__item-preview"
+              @click="handlePictureCardPreview(file)"
+            >
+              <el-icon><zoom-in /></el-icon>
+            </span>
+            <span
+              v-if="!disabled"
+              class="el-upload-list__item-delete"
+              @click="handleDownload(file)"
+            >
+              <el-icon><Download /></el-icon>
+            </span>
+            <span
+              v-if="!disabled"
+              class="el-upload-list__item-delete"
+              @click="handleRemove(file)"
+            >
+              <el-icon><Delete /></el-icon>
+            </span>
+          </span>
+        </div>
+      </template>
+    </el-upload>
+  
+    <el-dialog class="preview-image1" v-model="dialogVisible">
+      <img class="preview-image" :src="dialogImageUrl" alt="Preview Image" />
+    </el-dialog>
+  </div>
+
+  <!--Form-->
+
+  <el-form-item
+      prop="email"
+      label="Email"
+      :rules="[
+        {
+          required: true,
+          messphone: 'Please input email address',
+          trigger: 'blur',
+        },
+        {
+          type: 'email',
+          messphone: 'Please input correct email address',
+          trigger: ['blur', 'change'],
+        },
+      ]"
+    >
+    <el-input v-model="ruleForm.email" />
+  </el-form-item>
+
+  <el-form-item label="Nombre completo" prop="name">
+    <el-input v-model.string="ruleForm.name" placeholder="pe. Juan Felipe Medina Martinez"/>
+  </el-form-item>
+
+  <el-form-item label="Numero de cedula" prop="id_number">
+    <el-input v-model.number="ruleForm.id_number"/>
+  </el-form-item>
+
+  <el-form-item label="Puntaje Global" prop="globalScore">
+    <el-input disabled placeholder="0"/>
+  </el-form-item>
+
+
+  <el-form-item label="phone" prop="phone">
+      <el-input v-model.number="ruleForm.phone" type="number" />
+  </el-form-item>
+
+
+    <el-form-item label="Password" prop="pass">
+      <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
     </el-form-item>
 
 
-    <el-form-item label="Correo" prop="name">
-      <el-input v-model="ruleForm.name" />
-    </el-form-item>
-    
-    
-    <el-form-item label="Puntaje Global" prop="name">
-      <el-input v-model="ruleForm.name" />
-    </el-form-item>
-
-    <el-form-item label="Rol" prop="name">
-      <el-input v-model="ruleForm.name" />
-    </el-form-item>
-
-    <el-form-item label="Telefono/celular" prop="name">
-      <el-input v-model="ruleForm.name" />
-    </el-form-item>
-
-    <el-tooltip
-      class="box-item"
-      effect="light"
-      content="Región a la que pertenece el/la colaborador/a"
-      placement="top-start">
-    <el-form-item label="Departamento" prop="region">
-        <el-select v-model="ruleForm.region" placeholder="Región">
-          <el-option label="Amazonas" value="Amazonas" />
-              <el-option label="Amazonas" value="amazonas" />
-              <el-option label="Antioquia" value="antioquia" />
-              <el-option label="Arauca" value="arauca" />
-              <el-option label="Atlántico" value="atlantico" />
-              <el-option label="Bolívar" value="bolivar" />
-              <el-option label="Boyacá" value="boyaca" />
-              <el-option label="Caldas" value="caldas" />
-              <el-option label="Caquetá" value="caqueta" />
-              <el-option label="Casanare" value="casanare" />
-              <el-option label="Cauca" value="cauca" />
-              <el-option label="Cesar" value="cesar" />
-              <el-option label="Chocó" value="choco" />
-              <el-option label="Córdoba" value="cordoba" />
-              <el-option label="Cundinamarca" value="cundinamarca" />
-              <el-option label="Guainía" value="guainia" />
-              <el-option label="Guaviare" value="guaviare" />
-              <el-option label="Huila" value="huila" />
-              <el-option label="La Guajira" value="laguajira" />
-              <el-option label="Magdalena" value="magdalena" />
-              <el-option label="Meta" value="meta" />
-              <el-option label="Nariño" value="narino" />
-              <el-option label="Norte de Santander" value="nortedesantander" />
-              <el-option label="Putumayo" value="putumayo" />
-              <el-option label="Quindío" value="quindio" />
-              <el-option label="Risaralda" value="risaralda" />
-              <el-option label="San Andrés y Providencia" value="sanandresyprovidencia" />
-              <el-option label="Santander" value="santander" />
-              <el-option label="Sucre" value="sucre" />
-              <el-option label="Tolima" value="tolima" />
-              <el-option label="Valle del Cauca" value="valledelcauca" />
-              <el-option label="Vaupés" value="vaupes" />
-              <el-option label="Vichada" value="vichada" />
-        </el-select>
-      </el-form-item>
-    </el-tooltip>
-
-    <el-form-item label="Tipo de colaborador" prop="count">
-      <el-select-v2
-        v-model="ruleForm.count"
-        placeholder="seleccionar"
-        :options="options"
+    <el-form-item label="Confirm" prop="checkPass">
+      <el-input
+        v-model="ruleForm.checkPass"
+        type="password"
+        autocomplete="off"
       />
+
+
     </el-form-item>
 
-
-    <el-form-item label="Fecha de nacimiento" required>
+     <el-form-item label="Fecha de nacimiento">
       <el-col>
-        <el-form-item prop="date1">
-          <el-date-picker
-            v-model="ruleForm.date1"
-            type="date"
-            aria-label="Pick a date"
-            placeholder="Pick a date"
-            style="width: 100%"
-          />
-        </el-form-item>
+        <el-date-picker
+          v-model="ruleForm.date1"
+          type="date"
+          aria-label="Pick a date"
+          placeholder="Pick a date"
+          style="width: 100%"
+        />
       </el-col>
     </el-form-item>
 
+    <el-form-item label="Rol del colaborador" prop="rol">
+      <el-select v-model="ruleForm.rol" placeholder="Selecciona un cargo">
+        <el-option 
+        v-for="item in positions.cargos"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+        />
+      </el-select>
+    </el-form-item>
 
-    <el-form-item label="Es?" prop="delivery">
-      <el-switch v-model="ruleForm.delivery" />
+
+    <el-form-item label="Departamento" prop="region">
+      <el-select v-model="ruleForm.region" placeholder="Selecciona un departamento">
+        <el-option 
+        v-for="item in regions.departamentos"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+        />
+      </el-select>
     </el-form-item>
-    <el-form-item label="Tipo de cargo" prop="type">
-      <el-checkbox-group v-model="ruleForm.type">
-        <el-checkbox value="Online activities" name="type">
-          Online activities
-        </el-checkbox>
-        <el-checkbox value="Promotion activities" name="type">
-          Promotion activities
-        </el-checkbox>
-        <el-checkbox value="Offline activities" name="type">
-          Offline activities
-        </el-checkbox>
-        <el-checkbox value="Simple brand exposure" name="type">
-          Simple brand exposure
-        </el-checkbox>
-      </el-checkbox-group>
+
+     <el-form-item label="Acceso completo?" prop="delivery">
+      <el-switch
+      style="
+      --el-switch-on-color: #8000ff;
+      --el-switch-off-color: black;
+      "
+      v-model="statusSwitch" disabled/>
     </el-form-item>
-    <el-form-item style="margin-left: auto; margin-right: auto;" class="btns">
-      <el-button  type="danger" @click="resetForm(ruleFormRef)">Reset</el-button>
+    
+    <el-form-item>
+      <el-button type="primary" @click="submitForm(ruleFormRef)">
+        Submit
+      </el-button>
+      <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
     </el-form-item>
   </el-form>
-</div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref , watch} from 'vue'
+import { computed } from 'vue'
+import axios from 'axios'
 import type { FormInstance, FormRules } from 'element-plus'
-import {CaretTop} from '@element-plus/icons-vue'
-interface RuleForm {
-  name: string
-  region: string
-  count: string
-  date1: string
-  date2: string
-  delivery: boolean
-  location: string
-  type: string[]
-  resource: string
-  desc: string
-}
+import regions from '../../../components/generalData/regions.json'
+import positions from '../../../components/generalData/positions.json'
+import type {UploadUserFile } from 'element-plus'
+import type { UploadFile } from 'element-plus'
+import { ElMessage } from 'element-plus'
+
+const loading = ref(false)
+
+const fileList = ref<UploadUserFile[]>([])
+
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+const disabled = ref(false)
 
 const ruleFormRef = ref<FormInstance>()
-const ruleForm = reactive<RuleForm>({
-  name: 'Hello',
-  region: '',
-  count: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  location: '',
-  type: [],
-  resource: '',
-  desc: '',
-})
 
+const handleRemove = (file: UploadFile) => {
+  fileList.value = fileList.value.filter(f => f.uid !== file.uid)
+}
 
-const rules = reactive<FormRules<RuleForm>>({
-  name: [
-    { required: true, message: 'Please input Activity name', trigger: 'blur' },
-    { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
-  ],
-  region: [
-    {
-      required: true,
-      message: 'Please select Activity zone',
-      trigger: 'change',
-    },
-  ],
-  count: [
-    {
-      required: true,
-      message: 'Please select Activity count',
-      trigger: 'change',
-    },
-  ],
-  date1: [
-    {
-      type: 'date',
-      required: true,
-      message: 'Please pick a date',
-      trigger: 'change',
-    },
-  ],
-  date2: [
-    {
-      type: 'date',
-      required: true,
-      message: 'Please pick a time',
-      trigger: 'change',
-    },
-  ],
-  location: [
-    {
-      required: true,
-      message: 'Please select a location',
-      trigger: 'change',
-    },
-  ],
-  type: [
-    {
-      type: 'array',
-      required: true,
-      message: 'Please select at least one activity type',
-      trigger: 'change',
-    },
-  ],
-  resource: [
-    {
-      required: true,
-      message: 'Please select activity resource',
-      trigger: 'change',
-    },
-  ],
-  desc: [
-    { required: true, message: 'Please input activity form', trigger: 'blur' },
-  ],
-})
+const handlePictureCardPreview = (file: UploadFile) => {
+  dialogImageUrl.value = file.url!
+  dialogVisible.value = true
+}
 
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      console.log('submit!')
+const emit = defineEmits<{
+  (e: 'image-selected', image:File): void
+}>()
+
+const handleFileChange = (file: UploadFile, fileListRaw: UploadFile[]) => {
+  fileList.value = [fileListRaw[fileListRaw.length - 1]]
+
+  if(file.raw instanceof File) {
+    emit('image-selected', file.raw)
+  }
+}
+
+const handleExceed = (files: File[], fileListRaw: UploadUserFile[]) => {
+  fileList.value = [] 
+  const newFile: UploadUserFile = {
+    name: files[0].name,
+    url: URL.createObjectURL(files[0])
+  }
+  fileList.value.push(newFile)
+}
+
+const handleDownload = (file: UploadFile) => {
+  if(!file.url) return
+  const link = document.createElement('a')
+  link.href = file.url
+  link.download = file.name || `${file} descargado con exito`
+  link.click()
+}
+
+//form
+
+const checkName = (rule: any, value: String, callback: any) => {
+  if (!value) {
+    return callback(new Error('Por favor ingrese el nombre completo del colaborador'))
+  }
+  setTimeout(() => {
+    
+    if (Number(value)) {
+      callback(new Error('Debe ingresar solo valores alfabeticos'))
+    }
+    else if(value.length <= 3 || value.length > 255){
+      callback(new Error('La longitud del nombre debe ser Min: 3, Max: 255'))
+      callback(new alert(value.length))
+    }
+    else{
+      callback()
+    }
+  }, 1000)
+}
+
+const checkuserId = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    return callback(new Error('Debe ingresar un numero de cedula'))
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(value)) {
+      callback(new Error(`${value} no es un id valido`))
     } else {
-      console.log('error submit!', fields)
+      if (value.toString().length < 7) {
+        callback(new Error('El id no es valido'))
+      } else {
+        callback()
+      }
+    }
+  }, 1000)
+}
+
+const checkphone = (rule: any, value: Number, callback: any) => {
+  if (!value) {
+    return callback(new Error('Por favor ingrese el telefono'))
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(value)) {
+      callback(new Error('Solo valores numericos'))
+    } 
+    else if(value.toString().length < 9) {
+        callback(new Error('esto no parece un numero de telefono'))
+    }
+    else {
+        callback()
+    }
+  }, 1000)
+}
+
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('Please input the password'))
+  } else {
+    if (ruleForm.checkPass !== '') {
+      if (!ruleFormRef.value) return
+      ruleFormRef.value.validateField('checkPass')
+    }
+    callback()
+  }
+}
+const validatePass2 = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('Please input the password again'))
+  } else if (value !== ruleForm.pass) {
+    callback(new Error("Two inputs don't match!"))
+  } else {
+    callback()
+  }
+}
+
+const imageUrlToSend = computed(() => {
+  return fileList.value.length > 0 && fileList.value[0].url
+    ? fileList.value[0].url
+    : 'https://www.vhv.rs/dpng/d/505-5058560_person-placeholder-image-free-hd-png-download.png'
+})
+
+const ruleForm = reactive({
+  pass: '',
+  checkPass: '',
+  name: '',
+  date1:'',
+  email:'',
+  globalScore:0,
+  phone: Number,
+  rol:'',
+  id_number:'',
+  region:'',
+  img:''
+})
+
+
+const statusSwitch = ref(false)
+
+watch(()=> ruleForm.rol, (newRol) => {
+  statusSwitch.value = newRol === 'director_de_tecnologia_ti' 
+  || newRol === 'tecnico_de_sistemas'
+  || newRol == 'presidente' 
+  ? true : false
+})
+
+const rules = reactive<FormRules<typeof ruleForm>>({
+  pass: [{ validator: validatePass, trigger: 'blur' }],
+  checkPass: [{ validator: validatePass2, trigger: 'blur' }],
+  name: [{ validator: checkName, min:3,trigger: 'blur' }],
+  id_number: [{ validator: checkuserId, min:7,trigger: 'blur' }],
+  phone: [{ validator: checkphone, trigger: 'blur' }],
+})
+
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      setTimeout(() => {
+          loading.value = true
+        }, 1000);
+      const formData = new FormData()
+
+      formData.append('name', ruleForm.name)
+      formData.append('age', ruleForm.date1.toString())
+      formData.append('email', ruleForm.email)
+      formData.append('globalScore', ruleForm.globalScore.toString())
+      formData.append('phone', ruleForm.phone.toString())
+      formData.append('password', ruleForm.pass)
+      formData.append('rol', ruleForm.rol)
+      formData.append('id_number', ruleForm.id_number)
+      formData.append('img', imageUrlToSend.value)
+      formData.append('region', ruleForm.region)
+
+      axios.post('http://127.0.0.1:8000/api/empleado', formData, {
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
+      .then(function (response) {
+        ElMessage({
+          showClose: true,
+          message: 'Nuevo colaborador creado correctamente',
+          type:'success'
+        })
+        loading.value = false
+        
+      })
+      .catch(function (error) {
+        setTimeout(() => {
+          loading.value = false
+        }, 1000);
+        console.log(error);
+        ElMessage({
+          showClose: true,
+          message: 'Error al cargar los datos. Verifique la informacion e intentelo de nuevo',
+        })
+      }
+    );
+
+
+    } else {
+      console.log('error submit!')
     }
   })
 }
@@ -234,16 +394,41 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields()
 }
 
-const options = Array.from({ length: 10000 }).map((_, idx) => ({
-  value: `${idx + 1}`,
-  label: `${idx + 1}`,
-}))
+const props = defineProps<{
+  userToEdit: any
+}>()
+
+watch(
+  () => props.userToEdit,
+  (newUser) => {
+    if (newUser) {
+      ruleForm.name = newUser.name
+      ruleForm.email = newUser.email
+      ruleForm.id_number = newUser.id_number
+      ruleForm.globalScore = newUser.globalScore
+      ruleForm.phone = newUser.phone
+      ruleForm.pass = newUser.pass
+      ruleForm.rol = newUser.rol
+      ruleForm.region = newUser.region
+      ruleForm.date1 = newUser.date1
+      ruleForm.img = newUser.img
+    }
+  },
+  {immediate:true}
+)
 </script>
-
-
 
 <style scoped>
 .container{
-  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-image{
+  max-width: 500px;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
 }
 </style>

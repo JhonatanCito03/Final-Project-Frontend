@@ -1,0 +1,29 @@
+{
+"cargos":[
+  { "value": "presidente", "label": "Presidente" },
+  { "value": "gerente_general", "label": "Gerente General" },
+  { "value": "gerente_zonal", "label": "Gerente Zonal" },
+  { "value": "gerente_de_oficina", "label": "Gerente de Oficina" },
+  { "value": "subgerente", "label": "Subgerente" },
+  { "value": "director_comercial", "label": "Director Comercial" },
+  { "value": "director_financiero", "label": "Director Financiero" },
+  { "value": "director_de_riesgos", "label": "Director de Riesgos" },
+  { "value": "director_de_tecnologia_ti", "label": "Director de Tecnología (TI)" },
+  { "value": "director_de_talento_humano", "label": "Director de Talento Humano" },
+  { "value": "contador", "label": "Contador" },
+  { "value": "coordinador_operativo", "label": "Coordinador Operativo" },
+  { "value": "coordinador_de_credito_y_cartera", "label": "Coordinador de Crédito y Cartera" },
+  { "value": "asesor_de_oficina", "label": "Asesor de Oficina" },
+  { "value": "asesor_comercial", "label": "Asesor Comercial" },
+  { "value": "auxiliar_administrativo", "label": "Auxiliar Administrativo" },
+  { "value": "auxiliar_contable", "label": "Auxiliar Contable" },
+  { "value": "cajero", "label": "Cajero" },
+  { "value": "analista_de_credito", "label": "Analista de Crédito" },
+  { "value": "analista_de_cartera", "label": "Analista de Cartera" },
+  { "value": "auxiliar_de_servicio_al_cliente", "label": "Auxiliar de Servicio al Cliente" },
+  { "value": "auxiliar_de_archivo", "label": "Auxiliar de Archivo" },
+  { "value": "tecnico_de_sistemas", "label": "Técnico de Sistemas" }
+]
+}
+
+

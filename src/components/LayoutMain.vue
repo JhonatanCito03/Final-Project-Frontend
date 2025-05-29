@@ -7,25 +7,10 @@ import Statistic_ from './users/Statistic_.vue';
 import {CaretTop} from '@element-plus/icons-vue'
 
 
-import { VueLenis, useLenis } from 'lenis/vue'
-import { watch } from 'vue'
-
-function scrollToTop() {
-  lenis.value.scrollTo(0, { duration: 1.5 })
-}
-
-const lenis = useLenis(({ scroll }) => {
-})
-
-watch(lenis, (lenis) => {
-})
-
 </script >
 
 
 <template>
-<VueLenis root>
-    <!-- content -->
     <el-container style="height: 100vh;">
         <el-header>
             <Navbar></Navbar>
@@ -40,11 +25,9 @@ watch(lenis, (lenis) => {
                 <Statistic_/>
                 <slot name="slotLayout">
                 </slot>
-                <el-button @click="scrollToTop" type="info" :icon="CaretTop" circle />
             </el-main>
         </el-container>
     </el-container> 
-</VueLenis>
     
 </template>
   

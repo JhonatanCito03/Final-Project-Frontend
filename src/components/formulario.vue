@@ -9,24 +9,31 @@
       background-color: #8000ff;
       color: aliceblue;
       "
-      >Crear {{ drawerTitle }}</el-button>
+      >{{ drawerTitle }}
+    </el-button>
     </div>
     </div>
-    <keep-alive>
+
     <el-main class="main-content">
-                <slot name="slotForm_drawer"></slot>
+      <keep-alive>
+          <slot name="slotForm_drawer"></slot>
+      </keep-alive>
     </el-main>
-    </keep-alive>
   </el-drawer>
-  
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useDrawerStore} from '@/components/stores/useDrawerStore'
+import { ref } from 'vue'
+
 const drawerStore = useDrawerStore()
-const propiedad = defineProps({
+
+defineProps({
   drawerTitle: String,
 })
+
+
+
 </script>
 
 <style scoped>

@@ -15,17 +15,11 @@ import animaciones from '../components/docs/animaciones.vue';
 import metas_captacion from '../views/estadisticas_metas/metas_personales/personal_captacion.vue'
 import metas_colocacion from '../views/estadisticas_metas/metas_personales/personal_colocacion.vue'
 import metas_mixtas from '../views/estadisticas_metas/metas_personales/personal_mixto.vue'
-import prueba from '../views/prueba.vue';
 
 
 import r_empleados from '../views/rankings/r_empleados/r_empleados.vue';
 
 const routes = [
-    {
-        path:'/pruebas',
-        name: 'pruebas',
-        component:prueba
-    },
     {
         path:'/',
         name: 'home',
