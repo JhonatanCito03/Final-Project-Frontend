@@ -49,7 +49,6 @@ const ruleForm = reactive({
   checkPass: '',
 })
 
-// Rellenar los campos cuando cambie el `user`
 watch(
   () => props.user,
   (nuevoUsuario) => {
