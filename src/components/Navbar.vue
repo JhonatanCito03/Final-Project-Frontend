@@ -37,7 +37,7 @@
       </el-sub-menu>
 
       <el-sub-menu index="3" id="sub3">
-        <template v-if="userInfo.userInfo.name !== ''" #title><el-icon><user/></el-icon>Saludos, {{ primerNombre }}</template>
+        <template v-if="userInfo.userInfo.name !== ''" #title><el-icon><user/></el-icon>{{ primerNombre }}</template>
         <div id="editable2">
         <el-menu-item id="navbarIcon1" index="2-1" @click="mensajebf"><el-icon><user/></el-icon>Perfil</el-menu-item>
         <el-menu-item id="navbarIcon2" index="2-2"><el-icon><BellFilled/></el-icon>Reporte de bugs</el-menu-item>
@@ -47,33 +47,17 @@
     </el-menu>
   </keep-alive>
     
-  </template>
+</template>
   
-  <script lang="ts" setup>
+<script lang="ts" setup>
   import userInfo from '../../userInfo'
   import { ref } from 'vue'
   import { Menu as IconMenu, User, BellFilled, Close,Document,HomeFilled} from '@element-plus/icons-vue'
   import {ElMessageBox} from 'element-plus'
   import { useRouter } from 'vue-router'
 
-  const errorMsg = ()=>{
-  ElMessageBox.alert(   
-    `Parece que no se pueden cargar los datos de esta sesión, por favor vuelva a intentarlo.?`,
-    'LogIn{ERROR}',
-    {
-      confirmButtonText: 'Confirmar',
-      dangerouslyUseHTMLString: true,
-      type: 'warning',
-    }
-  ).then(() => {
-    router.push('/')
-  }) 
-  }
-
-
  let usuarios = [{name:userInfo.userInfo.name}]
  let primerNombre = ''
-  console.log(usuarios)
 
   if(usuarios[0]["name"] !== ''){
     let valor = usuarios.map(user => {
@@ -85,16 +69,30 @@
   }
   else{
     console.log('error inesperado')
-    errorMsg()
   }
 
 
 const router = useRouter()
 
+//pruebas
+
+const props = defineProps({
+  user: Object
+})
+
 
   const mensajebf = (done: () => void) => {
     ElMessageBox.confirm(
-    `<h4>Mi informacion</h4><br><img style="margin-top:-40px;display: flex; justify-content: center; align-items: center; margin-right:auto; margin-left: auto;width: 180px;height: 180px;" src="${userInfo.userInfo.img}"> Usuario: ${userInfo.userInfo.name}<br>Número de cédula: ${userInfo.userInfo.id}<br>Su rol en la empresa: ${userInfo.userInfo.rol}<br><hr>Descripcion del rol: ${userInfo.userInfo.message}`,
+    `
+    <img style="margin-top:5px;display: flex; justify-content: center; align-items: center; margin-right:auto; margin-left: auto;width: 180px;height: 180px;" src="${userInfo.userInfo.img}">
+    Usuario: ${userInfo.userInfo.name}<br/>
+    Número de cédula: ${userInfo.userInfo.id_number}<br/>
+    Fecha de nacimiento: ${userInfo.userInfo.age}<br/>
+    Correo electronico: ${userInfo.userInfo.email}<br/>
+    Telefono: ${userInfo.userInfo.phone}<br/>
+    Su rol en la empresa: ${userInfo.userInfo.rol}<br/>
+    <hr>Descripcion del rol: ${userInfo.userInfo.message}<br/>
+    `,
     'Información de Usuario',
     {
       confirmButtonText: 'Confirmar',
@@ -140,8 +138,8 @@ ElMessageBox.confirm(
   const handleSelect = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
   }
-  </script>
-  <style scoped>
+</script>
+<style scoped>
   img{
     width: 100px;
     height: 80px;
@@ -177,4 +175,4 @@ ElMessageBox.confirm(
     border-radius: 5px;
     margin-right: -6px;
   }
-  </style>
+</style>

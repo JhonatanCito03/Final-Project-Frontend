@@ -45,7 +45,6 @@
   import FormularioMunicipios from "./components/formMunicipios.vue"
   import Header from '../../components/Header.vue';
   import {Delete,Edit, Loading} from "@element-plus/icons-vue"
-  import userData from '../../../userData.json'
 
   const mostrarFormulario = ref(false)
   const editandoFormulario = ref(false)

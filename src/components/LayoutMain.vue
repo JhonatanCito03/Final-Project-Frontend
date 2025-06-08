@@ -2,11 +2,22 @@
 
 import Navbar from '../components/Navbar.vue';
 import Sidebar from '../components/SidebarMenu.vue';
-import Statistic_ from './users/Statistic_.vue';
+import userInfo from '../../userInfo'
+import { useRouter } from 'vue-router';
+import { ElNotification } from 'element-plus';
 
-import {CaretTop} from '@element-plus/icons-vue'
+const router = useRouter();
 
+console.log(userInfo.is_running)
 
+if(userInfo.userInfo.id_number === '' && userInfo.userInfo.password === ''){
+    router.push('/')
+    ElNotification({
+    title: 'Debe iniciar sesion',
+    message: 'Por favor inicie sesion para acceder a TrueMaster',
+    type: 'warning',
+  })
+}
 </script >
 
 
@@ -21,14 +32,12 @@ import {CaretTop} from '@element-plus/icons-vue'
             <el-aside width="auto">
                 <Sidebar></Sidebar>
             </el-aside>
-            <el-main class="main-content">
-                <Statistic_/>
+            <el-main class="main-content" style="margin-top: 20px;">
                 <slot name="slotLayout">
                 </slot>
             </el-main>
         </el-container>
-    </el-container> 
-    
+    </el-container>     
 </template>
   
 

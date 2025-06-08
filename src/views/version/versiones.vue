@@ -24,8 +24,6 @@
 
 <script setup>
 import LayoutMain from '../../components/LayoutMain.vue';
-import usersJSON from '../../../userData.json'
-      
 const list = [{
     0 : 'Crear datos de actualizacion',
     1 : 'Crear datos de nuevo parche',

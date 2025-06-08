@@ -1,6 +1,5 @@
 <script setup>
 import LayoutMain from '../../../components/LayoutMain.vue';
-import usersJSON from '../../../../userData.json'
     const tableData = usersJSON.tableData
     console.log(tableData)
 

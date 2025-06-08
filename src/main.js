@@ -15,7 +15,4 @@ app.use(createPinia())
 app.use(ElementPlus)
 app.use(router)
 app.mount('#app')
-app.use(PrimeVue,{
-    preset:Aura
-})
 
