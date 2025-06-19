@@ -181,10 +181,8 @@ const handleDelete = (id:number, name:string) => {
     } catch(error){
       console.log(error)
     } finally {
-      setTimeout(() => {
     loading.value = false
-    loaded.value = false
-              }, 2000); 
+    loaded.value = true
     }
   }
  

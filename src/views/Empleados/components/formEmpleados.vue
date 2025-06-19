@@ -30,21 +30,21 @@
               class="el-upload-list__item-preview"
               @click="handlePictureCardPreview(file)"
             >
-              <el-icon><zoom-in /></el-icon>
+              <el-icon style="color: aliceblue;"><ZoomIn/></el-icon>
             </span>
             <span
               v-if="!disabled"
               class="el-upload-list__item-delete"
               @click="handleDownload(file)"
             >
-              <el-icon><Download /></el-icon>
+              <el-icon style="color: aliceblue;"><Download/></el-icon>
             </span>
             <span
               v-if="!disabled"
               class="el-upload-list__item-delete"
               @click="handleRemove(file)"
             >
-              <el-icon><Delete /></el-icon>
+              <el-icon style="color: aliceblue;"><Delete/></el-icon>
             </span>
           </span>
         </div>
@@ -168,6 +168,7 @@ import { reactive, ref , watch} from 'vue'
 import { computed } from 'vue'
 import axios from 'axios'
 import type { FormInstance, FormRules } from 'element-plus'
+import {Delete,Download,ZoomIn} from '@element-plus/icons-vue' 
 import regions from '../../../components/generalData/regions.json'
 import positions from '../../../components/generalData/positions.json'
 import type {UploadUserFile } from 'element-plus'
