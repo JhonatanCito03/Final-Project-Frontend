@@ -1,6 +1,7 @@
 <template>
     <LayoutMain>
       <template #slotLayout>
+        <button>Hola</button>
           <Header   
           :titulo="'Empleados'"
           :tituloBoton="'Crear colaborador'"
@@ -14,8 +15,6 @@
                 <formEmpleados v-if="is_create_btn"/>
                 <formUpdate v-if="is_edit_btn" :user="usuarioSeleccionado"/>
               </template>
-
-            
           </formulario>
           <!--Loading-->
               <el-table 
@@ -48,8 +47,9 @@
                   :formatter="formatDay"
                   width="115"
                   />
-              </el-table>
-              <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" v-if="!loaded" @click="loadData">Recargar</el-button>
+                </el-table>
+                <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" v-if="!loaded" @click="loadData">Recargar</el-button>
+                <button>Hola</button>
       </template>
     </LayoutMain>
 </template>
