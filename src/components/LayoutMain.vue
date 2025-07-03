@@ -10,14 +10,6 @@ const router = useRouter();
 
 console.log(userInfo.is_running)
 
-if(userInfo.userInfo.id_number === '' && userInfo.userInfo.password === ''){
-    router.push('/')
-    ElNotification({
-    title: 'Debe iniciar sesion',
-    message: 'Por favor inicie sesion para acceder a TrueMaster',
-    type: 'warning',
-  })
-}
 </script >
 
 
