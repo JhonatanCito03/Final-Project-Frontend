@@ -58,7 +58,7 @@
                   width="115"
                   />
               </el-table>
-              <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" v-if="!loaded" @click="loadData">Recargar</el-button>
+              <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" @click="loadData">Recargar</el-button>
       </template>
     </LayoutMain>
 </template>
@@ -76,6 +76,7 @@
   import { useRouter } from 'vue-router'
   import { computed } from 'vue';
   import {useDrawerStore} from '../../components/stores/useDrawerStore'
+import is_logged from '../../../userInfo';
 
   function formatDay(row, column, cellValue) {
   if (!cellValue) return ''
@@ -153,9 +154,11 @@ const handleDelete = (id:number, name:string) => {
         message: 'No se elimino el usuario',
       })
     })
-    
   }
   catch{}
+  finally{
+
+  }
 }
 
 

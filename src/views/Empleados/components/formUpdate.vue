@@ -1,5 +1,6 @@
 <template>
-  <el-form
+  <keep-alive>
+    <el-form
     v-loading="loading"
     ref="ruleFormRef"
     style="max-width: 600px"
@@ -165,6 +166,7 @@
       <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
     </el-form-item>
   </el-form>
+  </keep-alive>
 </template>
 
 <script lang="ts" setup>
