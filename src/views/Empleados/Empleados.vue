@@ -22,18 +22,18 @@
               v-loading="loading"
               :data="tableData" 
               stripe 
-              style="width: 100%; margin-left: auto; margin-right: auto;">
+              style="width: 90%; margin-left: auto; margin-right: auto;">
                   <el-table-column label="Foto" width="100">
                         <template #default="{ row }">
                         <img :src="row.img" style="width: 80px; height: 80px; object-fit: cover;" />
                         </template>
                   </el-table-column>
-                  <el-table-column prop="name" label="Nombre" width="260" />
+                  <el-table-column prop="nombre" label="Nombre" width="260" />
                   <el-table-column prop="email" label="Correo" width="280" />
-                  <el-table-column prop="globalScore" label="Puntaje global" width="100" />
+                  <el-table-column prop="puntaje_global" label="Puntaje global" width="100" />
                   <el-table-column prop="rol" label="Cargo en la empresa" width="160" />
                   <el-table-column prop="phone" label="Telefono" width="140" />
-                  <el-table-column prop="region" label="Región" width="140" />
+                  <el-table-column prop="region" label="Región" width="120" />
                   <el-table-column fixed="right" label="Acciones" min-width="80">
                     <template #default="{ row }">
                     <el-button 
@@ -47,16 +47,10 @@
                     link 
                     type="danger" 
                     :icon="Delete"
-                    @click="handleDelete(row.id,row.name)"
+                    @click="handleDelete(row.id,row.nombre)"
                     ></el-button>
                     </template>
                   </el-table-column>
-                  <el-table-column 
-                  prop="created_at" 
-                  label="Fecha de creacion"
-                  :formatter="formatDay"
-                  width="115"
-                  />
               </el-table>
               <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" @click="loadData">Recargar</el-button>
       </template>
@@ -76,7 +70,7 @@
   import { useRouter } from 'vue-router'
   import { computed } from 'vue';
   import {useDrawerStore} from '../../components/stores/useDrawerStore'
-import is_logged from '../../../userInfo';
+  //import is_logged from '../../../userInfo';
 
   function formatDay(row, column, cellValue) {
   if (!cellValue) return ''
@@ -127,13 +121,13 @@ import is_logged from '../../../userInfo';
 
 //table
 
-const handleDelete = (id:number, name:string) => {
-  console.log('eliminar empleado id: ', id, name) 
+const handleDelete = (id:number, nombre:string) => {
+  console.log('eliminar empleado id: ', id, nombre) 
   try{
   //prueba msg
     ElMessageBox.confirm(
-    `Esta usted seguro de que quiere eliminar a ${name} con id:${id}`,
-    `Eliminar empleado ${name}`,
+    `Esta usted seguro de que quiere eliminar a ${nombre} con id:${id}`,
+    `Eliminar empleado ${nombre}`,
     {
       confirmButtonText: 'Si, estoy segur@',
       cancelButtonText: 'No, no quiero eliminar',
@@ -142,7 +136,7 @@ const handleDelete = (id:number, name:string) => {
   )
     .then(() => {
       ElMessage({
-        type: `Usuario ${name} eliminado con exito`,
+        type: `Usuario ${nombre} eliminado con exito`,
         message: `${id} eliminado con exito`,
       })
       axios.delete(`http://127.0.0.1:8000/api/empleado/${id}`)
@@ -174,8 +168,7 @@ const handleDelete = (id:number, name:string) => {
         title:error,
         message: h('p', null, [
           h('span', null, 'Hubo un problema cargando los datos, por favor intentelo de nuevo')
-        ]),
-        cofirmButtonText: 'Recargar'
+        ])
       })
       .then(() => {
       router.push('/')
