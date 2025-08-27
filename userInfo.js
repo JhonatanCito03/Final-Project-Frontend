@@ -1,9 +1,9 @@
 const is_logged = {
     userInfo : {
         name: '',
-        age: 0,
+        age: '',
         email: '',
-        globalScore: 0,
+        globalScore: '',
         phone:'',
         password:'',
         rol: '',

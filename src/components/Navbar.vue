@@ -59,11 +59,14 @@
  let usuarios = [{name:userInfo.userInfo.name}]
  let primerNombre = ''
 
-  if(usuarios[0]["name"] !== ''){
-    let valor = usuarios.map(user => {
+  if (usuarios[0]["name"] && usuarios[0]["name"] !== '') {
+  let valor = usuarios.map(user => {
+    if (user.name) {
       const partesNombre = user.name.split(" ")
-      return partesNombre.slice(0,2).join(" ")
-    })
+      return partesNombre.slice(0, 2).join(" ")
+    }
+    return ''
+  })
     primerNombre = valor[0]
     console.log(primerNombre)
   }

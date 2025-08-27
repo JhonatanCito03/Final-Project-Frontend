@@ -63,10 +63,10 @@ const validate = dataUsers.value.some(user => {
   if(is_valid){
     userName.value = user.name
 
-    userInfo.userInfo.name = user.nombre
-    userInfo.userInfo.age = user.edad
+    userInfo.userInfo.name = user.name
+    userInfo.userInfo.age = user.age
     userInfo.userInfo.email = user.email
-    userInfo.userInfo.globalScore = user.puntaje_global
+    userInfo.userInfo.globalScore = user.globalScore
     userInfo.userInfo.phone = user.phone
     userInfo.userInfo.rol = user.rol
     userInfo.userInfo.password = user.password

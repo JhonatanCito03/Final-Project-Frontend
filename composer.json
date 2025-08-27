@@ -1,0 +1,26 @@
+{
+  "name": "truemaster/backend",
+  "description": "Backend for the TrueMaster project",
+  "type": "project",
+  "require": {
+    "php": "^8.1",
+    "laravel/framework": "^10.0"
+  },
+  "require-dev": {
+    "fakerphp/faker": "^1.21",
+    "phpunit/phpunit": "^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan package:discover --ansi"
+    ]
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
