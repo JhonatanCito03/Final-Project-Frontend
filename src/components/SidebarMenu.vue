@@ -48,9 +48,8 @@
             </template>
             <el-menu-item index="Empleados">Empleados</el-menu-item>
             <el-menu-item index="Paises">Paises</el-menu-item>
-            <el-menu-item index="Regiones">Regiones</el-menu-item>
-            <el-menu-item index="Departamentos">Departamentos</el-menu-item>
-            <el-menu-item index="Departamentos">Municipios</el-menu-item>
+            <el-menu-item index="Regiones">Departamentos</el-menu-item>
+            <el-menu-item index="Municipios">Municipios</el-menu-item>
             <el-menu-item index="Oficinas">Oficinas</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>

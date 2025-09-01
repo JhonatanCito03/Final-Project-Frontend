@@ -1,10 +1,9 @@
 <template>
     <LayoutMain>
       <template #slotLayout>
-        <button>Hola</button>
           <Header   
-          :titulo="'Empleados'"
-          :tituloBoton="'Crear colaborador'"
+          :titulo="'Municipios'"
+          :tituloBoton="'Crear municipio'"
           :abrir="() => { is_create(); openDrawer(); }"
           ></Header>
           
@@ -12,44 +11,67 @@
           :drawerTitle = "drawerTitle"
           >
               <template #slotForm_drawer>
-                <formEmpleados v-if="is_create_btn"/>
-                <formUpdate v-if="is_edit_btn" :user="usuarioSeleccionado"/>
+                <formMunicipios v-if="is_create_btn"/>
+                <formUpdateMunicipios v-if="is_edit_btn" :user="municipioSeleccionado"/>
               </template>
-          </formulario>
+
+            </formulario>
           <!--Loading-->
               <el-table 
               v-loading="loading"
               :data="tableData" 
               stripe 
-              style="width: 100%; margin-left: auto; margin-right: auto;">
-                  <el-table-column prop="name" label="Nombre" width="260" />
-                  <el-table-column prop="region" label="Región" width="140" />
-                  <el-table-column fixed="right" label="Acciones" min-width="80">
+              style="width: 90%; margin-left: auto; margin-right: auto; font-size: large;"
+              
+              >
+                  <el-table-column prop="nombre_municipio" label="Nombre" width="260" />
+                  <el-table-column prop="codigo_municipio" label="Codigo" width="100" />
+                  <el-table-column prop="poblacion" label="Población" width="140"  />
+
+                  <!--Caso de estudio-->
+                  <el-table-column 
+                  prop="es_capital"
+                  label="¿Es capital?"
+                  width="120"
+                  >
+                  <template #default="{ row }">
+                        {{ row.es_capital ? 'Si' : 'No' }}
+                    </template>
+                  </el-table-column>
+
+                  <!--Caso de estudio-->
+                <el-table-column 
+                    prop="activo"
+                    label="Activo?"
+                    width="120"
+                />
+
+
+                <el-table-column label="Departamento" width="180">
+                    <template #default="{ row }">
+                        {{ getRegionName(row.region_id) }}
+                    </template>
+                </el-table-column>
+
+                  <el-table-column fixed="right" label="Acciones">
                     <template #default="{ row }">
                     <el-button 
                     link 
                     size="large" 
                     :icon="Edit"
-                    @click="editarUsuario(row)"
+                    @click="editarRegion(row)"
                     >                  
                     </el-button>
                     <el-button 
                     link 
                     type="danger" 
                     :icon="Delete"
-                    @click="handleDelete(row.id,row.name)"
+                    @click="handleDelete(row.id,row.nombre_Region)"
                     ></el-button>
                     </template>
                   </el-table-column>
-                  <el-table-column 
-                  prop="created_at" 
-                  label="Fecha de creacion"
-                  :formatter="formatDay"
-                  width="115"
-                  />
-                </el-table>
-                <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" v-if="!loaded" @click="loadData">Recargar</el-button>
-                <button>Hola</button>
+              </el-table>
+              <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" @click="loadData">Recargar</el-button>
       </template>
     </LayoutMain>
 </template>
@@ -58,33 +80,27 @@
   import {Edit,Delete} from '@element-plus/icons-vue'
   import LayoutMain from '../../components/LayoutMain.vue';
   import Formulario from "../../components/formulario.vue";
-  import formMunicipios from 'src/views/municipios/components/formMunicipios.vue'
-  import formUdate from 'src/views/municipios/components/formUdate.vue'
+  import formMunicipios from './components/formMunicipios.vue';
+  import formUpdateMunicipios from './components/formUpdateMunicipios.vue';
   import Header from '../../components/Header.vue';
   import axios from 'axios'
-  import {ref,onMounted, h} from 'vue'
-  import { ElMessageBox, ElMessage } from 'element-plus';
+  import {ref,onMounted, h, watch} from 'vue'
+  import { ElMessageBox, ElMessage, formatter } from 'element-plus';
   import { useRouter } from 'vue-router'
   import { computed } from 'vue';
   import {useDrawerStore} from '../../components/stores/useDrawerStore'
+  import type { Action } from 'element-plus'
+import { row } from '@primeuix/themes/aura/datatable';
+  //import is_logged from '../../../userInfo';
 
-  function formatDay(row, column, cellValue) {
-  if (!cellValue) return ''
-  const date = new Date(cellValue)
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth()).padStart(2, '0')
-  const year = date.getFullYear()
-  return `${day}/${month}/${year}`
 
-  }
+  const municipioSeleccionado = ref(null)
 
-  const usuarioSeleccionado = ref(null)
-
-  function editarUsuario(usuario) {
+  function editarRegion(region) {
     is_create_btn.value = false
     is_edit_btn.value = true
     openDrawer()
-    usuarioSeleccionado.value = usuario
+    municipioSeleccionado.value = region
   }
 
   const drawerStore = useDrawerStore()
@@ -105,8 +121,8 @@
     is_create_btn.value = false
     is_edit_btn.value = true
   }
-  
-  const drawerTitle = computed(() => is_create_btn.value == true ? 'Crear Empleado' : 'Actualizar empleado')
+
+  const drawerTitle = computed(() => is_create_btn.value == true ? 'Creación de Regiones' : 'Actualización de Regiones')
 
   const router = useRouter()
  
@@ -117,13 +133,13 @@
 
 //table
 
-const handleDelete = (id:number, name:string) => {
-  console.log('eliminar empleado id: ', id, name) 
+const handleDelete = (id:number, nombre_region:string) => {
+  console.log('eliminar region id: ', id, nombre_region) 
   try{
   //prueba msg
     ElMessageBox.confirm(
-    `Esta usted seguro de que quiere eliminar a ${name} con id:${id}`,
-    `Eliminar empleado ${name}`,
+    `Esta usted seguro de que quiere eliminar a ${nombre_region} con id:${id}`,
+    `Eliminar region ${nombre_region}`,
     {
       confirmButtonText: 'Si, estoy segur@',
       cancelButtonText: 'No, no quiero eliminar',
@@ -132,53 +148,92 @@ const handleDelete = (id:number, name:string) => {
   )
     .then(() => {
       ElMessage({
-        type: `Usuario ${name} eliminado con exito`,
+        type: `Región ${nombre_region} eliminada con exito`,
         message: `${id} eliminado con exito`,
       })
-      axios.delete(`http://127.0.0.1:8000/api/empleado/${id}`)
+      axios.delete(`http://127.0.0.1:8000/api/municipio/${id}`)
       .then((response)=>{console.log(response, 'eliminado', id)})
     })
     .catch(() => {
       ElMessage({
         type: 'warning',
-        message: 'No se elimino el usuario',
+        message: 'No se elimino la region',
       })
     })
-    
   }
-  catch{}
+  catch(error){
+    console.log(error)
+  }
+  finally{
+
+  }
 }
 
 
-  function loadData(){
+function loadData() {
     try {
-    loading.value = true
-      axios.get('http://127.0.0.1:8000/api/municipio')
-    .then(response => {
-        tableData.value = response.data.municipio
-    })
-    .catch(error => {
-      ElMessageBox({
-        title:error,
-        message: h('p', null, [
-          h('span', null, 'Hubo un problema cargando los datos, por favor intentelo de nuevo')
-        ])
-      })
-      .then(() => {
-      router.push('/')
-      }) 
-    })
-    } catch(error){
-      console.log(error)
-    } finally {
-    loading.value = false
-    loaded.value = false
+        loading.value = true
+        axios.get('http://127.0.0.1:8000/api/municipio')
+            .then(response => {
+                tableData.value = []
+                if (response.data.data && response.data.data.length > 0) {
+                    response.data.data.forEach(municipio => {
+                        tableData.value.push(municipio)
+                    });
+                }
+                console.log(tableData.value)
+            })
+            .catch(error => {
+                if (error.response && error.response.status !== 404) {
+                    ElMessageBox({
+                        title: error,
+                        message: h('p', null, [
+                            h('span', null, 'Hubo un problema cargando los datos, por favor intentelo de nuevo')
+                        ])
+                    })
+                }
+                tableData.value = []
+            })
     }
-  }
- 
+    catch { }
+    finally {
+        loading.value = false
+        loaded.value = true
+    }
+}
   onMounted(async () => {
     loadData()
+    loadRegions()
   })
+
+  // === PAISES ===
+const regions = ref<{ id: number; nombre_region: string }[]>([])
+
+function loadRegions() {
+  axios.get('http://127.0.0.1:8000/api/region')
+    .then(response => {
+      const lista = response.data.data || response.data.lista || []
+      regions.value = lista.map((p: any) => ({
+        id: p.id,
+        nombre_region: p.nombre_region
+      }))
+      console.log('Regiones cargadas:', regions.value)
+    })
+
+    .catch(error => {
+        console.error('Error al cargar los departamentos:', error)
+    })
+}
+
+function getRegionName(region_id: number|string) {
+  const region = regions.value.find(
+    c => String(c.id) === String(region_id)
+  )
+  console.log('Region encontrada:', region)
+  return region ? region.nombre_region : 'Desconocido'
+}
+
+
 
 
 </script>

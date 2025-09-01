@@ -1,17 +1,8 @@
 <template>
   <el-drawer v-model="drawerStore.showDrawer" title="Modulo" :with-header="false">
     <div class="container">
-    <span>Modulo: Nuevo {{ drawerTitle }}</span>
-    <div class="buttons">
-      <el-button style="margin-left: 5px;">Cancelar</el-button>
-      <el-button 
-      style="
-      background-color: #8000ff;
-      color: aliceblue;
-      "
-      >{{ drawerTitle }}
-    </el-button>
-    </div>
+    <h1>Modulo de: {{ drawerTitle }}</h1>
+    <h1>***************************************</h1>
     </div>
 
     <el-main class="main-content">

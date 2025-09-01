@@ -2,25 +2,23 @@
   <el-form
     v-loading="loading"
     ref="ruleFormRef"
-    style="max-width: 600px"
     :model="ruleForm"
     status-icon
     :rules="rules"
-    label-width="auto"
     class="demo-ruleForm"
   >
-
   <div class="container">
     <el-upload
   v-model:file-list="fileList"
   list-type="picture-card"
+  style="margin-bottom: 20px;"
   :auto-upload="false"
   :limit="1"
   :on-change="handleFileChange"
   :on-exceed="handleExceed"
   accept="image/*"
   >
-      <el-icon><Plus /></el-icon>
+      <el-icon ><Plus/></el-icon>
   
       <template #file="{ file }">
         <div>
@@ -64,12 +62,12 @@
       :rules="[
         {
           required: true,
-          messphone: 'Please input email address',
+          message: 'Por favor ingrese una dirección de correo electrónico',
           trigger: 'blur',
         },
         {
           type: 'email',
-          messphone: 'Please input correct email address',
+          message: 'Por favor ingrese una dirección de correo electrónico válida',
           trigger: ['blur', 'change'],
         },
       ]"
@@ -155,10 +153,12 @@
     </el-form-item>
     
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">
-        Submit
-      </el-button>
-      <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
+        <div class="container" style="display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
+            <el-button style="color: aliceblue; background-color: blueviolet;" @click="submitForm(ruleFormRef)">
+              Crear Empleado
+            </el-button>
+            <el-button @click="resetForm(ruleFormRef)">Resetear formulario</el-button>
+        </div>      
     </el-form-item>
   </el-form>
 </template>
@@ -168,7 +168,7 @@ import { reactive, ref , watch} from 'vue'
 import { computed } from 'vue'
 import axios from 'axios'
 import type { FormInstance, FormRules } from 'element-plus'
-import {Delete,Download,ZoomIn} from '@element-plus/icons-vue' 
+import {Delete,Download,ZoomIn, Plus} from '@element-plus/icons-vue' 
 import regions from '../../../components/generalData/regions.json'
 import positions from '../../../components/generalData/positions.json'
 import type {UploadUserFile } from 'element-plus'
@@ -423,8 +423,8 @@ watch(
 .container{
   display: flex;
   justify-content: center;
+  margin-top: -70px;
 }
-
 .preview-image{
   max-width: 500px;
   width: 100%;

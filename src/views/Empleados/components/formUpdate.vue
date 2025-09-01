@@ -185,9 +185,6 @@ import {Plus,Delete,ZoomIn,Download} from '@element-plus/icons-vue'
 const user1PassRq = ref('')
 const loading = ref(false)
 
-const fileList = ref<UploadUserFile[]>([])
-
-const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 const disabled = ref(false)
 

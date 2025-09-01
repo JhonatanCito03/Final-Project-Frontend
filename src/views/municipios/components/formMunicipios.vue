@@ -10,170 +10,100 @@
     class="demo-ruleForm"
   >
 
-  <div class="container">
-    <el-upload
-  v-model:file-list="fileList"
-  list-type="picture-card"
-  :auto-upload="false"
-  :limit="1"
-  :on-change="handleFileChange"
-  :on-exceed="handleExceed"
-  accept="image/*"
-  >
-      <el-icon><Plus /></el-icon>
-  
-      <template #file="{ file }">
-        <div>
-          <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-          <span class="el-upload-list__item-actions">
-            <span
-              class="el-upload-list__item-preview"
-              @click="handlePictureCardPreview(file)"
-            >
-              <el-icon style="color: aliceblue;"><ZoomIn/></el-icon>
-            </span>
-            <span
-              v-if="!disabled"
-              class="el-upload-list__item-delete"
-              @click="handleDownload(file)"
-            >
-              <el-icon style="color: aliceblue;"><Download/></el-icon>
-            </span>
-            <span
-              v-if="!disabled"
-              class="el-upload-list__item-delete"
-              @click="handleRemove(file)"
-            >
-              <el-icon style="color: aliceblue;"><Delete/></el-icon>
-            </span>
-          </span>
-        </div>
-      </template>
-    </el-upload>
-  
-    <el-dialog class="preview-image1" v-model="dialogVisible">
-      <img class="preview-image" :src="dialogImageUrl" alt="Preview Image" />
-    </el-dialog>
-  </div>
 
   <!--Form-->
-
-  <el-form-item
-      prop="email"
-      label="Email"
-      :rules="[
-        {
-          required: true,
-          messphone: 'Please input email address',
-          trigger: 'blur',
-        },
-        {
-          type: 'email',
-          messphone: 'Please input correct email address',
-          trigger: ['blur', 'change'],
-        },
-      ]"
-    >
-    <el-input v-model="ruleForm.email" />
+  <el-form-item label="Nombre del municipio" prop="nombre_municipio">
+    <el-input v-model.string="ruleForm.nombre_municipio" type="text" />
   </el-form-item>
 
-  <el-form-item label="Nombre completo" prop="name">
-    <el-input v-model.string="ruleForm.name" placeholder="pe. Juan Felipe Medina Martinez"/>
+  <el-form-item label="Codigo identificador" prop="codigo_municipio">
+    <el-input v-model.string="ruleForm.codigo_municipio" type="text"/>
   </el-form-item>
 
-  <el-form-item label="Numero de cedula" prop="id_number">
-    <el-input v-model.number="ruleForm.id_number"/>
+  <!--Pruebas del formulario-->
+  <el-form-item label="Población" prop="poblacion">
+    <el-input v-model.number="ruleForm.poblacion" type="number"/>
   </el-form-item>
 
-  <el-form-item label="Puntaje Global" prop="globalScore">
-    <el-input disabled placeholder="0"/>
-  </el-form-item>
-
-
-  <el-form-item label="phone" prop="phone">
-      <el-input v-model.number="ruleForm.phone" type="number" />
-  </el-form-item>
-
-
-    <el-form-item label="Password" prop="pass">
-      <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
-    </el-form-item>
-
-
-    <el-form-item label="Confirm" prop="checkPass">
-      <el-input
-        v-model="ruleForm.checkPass"
-        type="password"
-        autocomplete="off"
-      />
-
-
-    </el-form-item>
-
-     <el-form-item label="Fecha de nacimiento">
-      <el-col>
-        <el-date-picker
-          v-model="ruleForm.date1"
-          type="date"
-          aria-label="Pick a date"
-          placeholder="Pick a date"
-          style="width: 100%"
-        />
-      </el-col>
-    </el-form-item>
-
-    <el-form-item label="Rol del colaborador" prop="rol">
-      <el-select v-model="ruleForm.rol" placeholder="Selecciona un cargo">
-        <el-option 
-        v-for="item in positions.cargos"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        />
+  <el-form-item label="Es capital?" prop="es_capital">
+      <el-select v-model="ruleForm.es_capital" placeholder="Seleccione una opción">
+        <el-option label="Sí, es capital" value="true" />
+        <el-option label="No, no es capital" value="false" />
       </el-select>
     </el-form-item>
 
-
-    <el-form-item label="Departamento" prop="region">
-      <el-select v-model="ruleForm.region" placeholder="Selecciona un departamento">
-        <el-option 
-        v-for="item in regions.departamentos"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        />
-      </el-select>
-    </el-form-item>
-
-     <el-form-item label="Acceso completo?" prop="delivery">
-      <el-switch
-      style="
-      --el-switch-on-color: #8000ff;
-      --el-switch-off-color: black;
-      "
-      v-model="statusSwitch" disabled/>
+    
+    <!--prueba2-->
+    <el-form-item label="Departamento al cual pertenece" prop="region_id">
+        <el-select v-model="ruleForm.region_id" placeholder="Seleccionar departamento">
+            <el-option
+            v-for="item in regions"
+            :key="item.id"
+            :label="item.nombre_region"
+            :value="item.id"
+            />
+        </el-select>
     </el-form-item>
     
+    <el-form-item label="¿Está activo?" prop="activo">
+      <el-input v-model="ruleForm.activo" disabled></el-input>
+    </el-form-item>
+
+    <!--Caso de estudio-->
+  
+    
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">
-        Submit
-      </el-button>
-      <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
+        <div class="container" style="display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;">
+            <el-button style="color: aliceblue; background-color: blueviolet;" @click="submitForm(ruleFormRef)">
+              Crear País
+            </el-button>
+            <el-button @click="resetForm(ruleFormRef)">Resetear formulario</el-button>
+        </div>      
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref , watch} from 'vue'
+import { onMounted, reactive, ref , watch} from 'vue'
 import { computed } from 'vue'
 import axios from 'axios'
 import type { FormInstance, FormRules } from 'element-plus'
 import {Delete,Download,ZoomIn} from '@element-plus/icons-vue' 
-import regions from '../../../components/generalData/regions.json'
-import positions from '../../../components/generalData/positions.json'
+import coinType from '../../../components/generalData/coinType.json'
+import languages from '../../../components/generalData/languages.json'
 import type {UploadUserFile } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
+
+
+onMounted(() => {
+  loadRegions()
+})
+
+const regions = ref([])
+
+const loadRegions = () => {
+  axios.get('http://127.0.0.1:8000/api/region')
+    .then(response => {
+        regions.value = []
+        response.data.lista.forEach(region => {
+          regions.value.push(region)
+        });
+
+        console.log('regiones cargas 101: ' + regions.value);
+    })
+    .catch(error => {
+      ElMessageBox({
+        title:error,
+        message: h('p', null, [
+          h('span', null, 'Hubo un problema cargando los datos, por favor intentelo de nuevo')
+        ])
+      })
+    })
+}
+
+
+
 
 const loading = ref(false)
 
@@ -185,156 +115,104 @@ const disabled = ref(false)
 
 const ruleFormRef = ref<FormInstance>()
 
-const handleRemove = (file: UploadFile) => {
-  fileList.value = fileList.value.filter(f => f.uid !== file.uid)
-}
-
-const handlePictureCardPreview = (file: UploadFile) => {
-  dialogImageUrl.value = file.url!
-  dialogVisible.value = true
-}
-
-const emit = defineEmits<{
-  (e: 'image-selected', image:File): void
-}>()
-
-const handleFileChange = (file: UploadFile, fileListRaw: UploadFile[]) => {
-  fileList.value = [fileListRaw[fileListRaw.length - 1]]
-
-  if(file.raw instanceof File) {
-    emit('image-selected', file.raw)
-  }
-}
-
-const handleExceed = (files: File[], fileListRaw: UploadUserFile[]) => {
-  fileList.value = [] 
-  const newFile: UploadUserFile = {
-    name: files[0].name,
-    url: URL.createObjectURL(files[0])
-  }
-  fileList.value.push(newFile)
-}
-
-const handleDownload = (file: UploadFile) => {
-  if(!file.url) return
-  const link = document.createElement('a')
-  link.href = file.url
-  link.download = file.name || `${file} descargado con exito`
-  link.click()
-}
-
-//form
 
 const checkName = (rule: any, value: String, callback: any) => {
   if (!value) {
-    return callback(new Error('Por favor ingrese el nombre completo del colaborador'))
+    return callback(new Error('Por favor ingrese el nombre del municipio'))
   }
-  setTimeout(() => {
-    
-    if (Number(value)) {
-      callback(new Error('Debe ingresar solo valores alfabeticos'))
-    }
-    else if(value.length <= 3 || value.length > 255){
-      callback(new Error('La longitud del nombre debe ser Min: 3, Max: 255'))
-      callback(new alert(value.length))
-    }
-    else{
+  else if (value.length < 3 || value.length > 50) {
+    callback(new Error('El nombre del municipio debe ser de 3 a 50 caracteres'))
+  } 
+  else {
       callback()
-    }
-  }, 1000)
-}
-
-const checkuserId = (rule: any, value: any, callback: any) => {
-  if (!value) {
-    return callback(new Error('Debe ingresar un numero de cedula'))
-  }
-  setTimeout(() => {
-    if (!Number.isInteger(value)) {
-      callback(new Error(`${value} no es un id valido`))
-    } else {
-      if (value.toString().length < 7) {
-        callback(new Error('El id no es valido'))
-      } else {
-        callback()
-      }
-    }
-  }, 1000)
-}
-
-const checkphone = (rule: any, value: Number, callback: any) => {
-  if (!value) {
-    return callback(new Error('Por favor ingrese el telefono'))
-  }
-  setTimeout(() => {
-    if (!Number.isInteger(value)) {
-      callback(new Error('Solo valores numericos'))
-    } 
-    else if(value.toString().length < 9) {
-        callback(new Error('esto no parece un numero de telefono'))
-    }
-    else {
-        callback()
-    }
-  }, 1000)
-}
-
-const validatePass = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('Please input the password'))
-  } else {
-    if (ruleForm.checkPass !== '') {
-      if (!ruleFormRef.value) return
-      ruleFormRef.value.validateField('checkPass')
-    }
-    callback()
-  }
-}
-const validatePass2 = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('Please input the password again'))
-  } else if (value !== ruleForm.pass) {
-    callback(new Error("Two inputs don't match!"))
-  } else {
-    callback()
   }
 }
 
-const imageUrlToSend = computed(() => {
-  return fileList.value.length > 0 && fileList.value[0].url
-    ? fileList.value[0].url
-    : 'https://www.vhv.rs/dpng/d/505-5058560_person-placeholder-image-free-hd-png-download.png'
-})
+const checkIsoCode = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value.length < 1 || value.length > 4) {
+        callback(new Error('Debe ingresar un valor válido'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+const checkPopulation = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value < 5000 || value > 20000000) {
+        callback(new Error('Los valores deben estar entre 5000 y 20000000'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+const check_is_capital = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value === '' || value === null) {
+        callback(new Error('Este campo es obligatorio'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+const check_region = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value === '' || value === null) {
+        callback(new Error('Seleccione un departamento'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+
+
+
+
 
 const ruleForm = reactive({
-  pass: '',
-  checkPass: '',
-  name: '',
-  date1:'',
-  email:'',
-  globalScore:0,
-  phone: Number,
-  rol:'',
-  id_number:'',
-  region:'',
-  img:''
+  nombre_municipio: '',
+  codigo_municipio: '',
+  poblacion: '',
+  es_capital: '',
+  activo: '',
+  region_id: ''
 })
+
+const is_region_active = ref('')
+
+function cargar_regiones() {
+
+    axios.get(`http://127.0.0.1:8000/api/region/${ruleForm.region_id}`)
+    .then(response => {
+        is_region_active.value = response.data.data.activo
+
+        
+        if(is_region_active.value === 'Si'){
+            ruleForm.activo = 'Si'
+        } else {
+            ruleForm.activo = 'No'
+        }
+    }).catch(error => {
+      console.error('Error al cargar los países:', error);
+    });
+}
+
 
 
 const statusSwitch = ref(false)
 
-watch(()=> ruleForm.rol, (newRol) => {
-  statusSwitch.value = newRol === 'director_de_tecnologia_ti' 
-  || newRol === 'tecnico_de_sistemas'
-  || newRol == 'presidente' 
-  ? true : false
-})
+
 
 const rules = reactive<FormRules<typeof ruleForm>>({
-  pass: [{ validator: validatePass, trigger: 'blur' }],
-  checkPass: [{ validator: validatePass2, trigger: 'blur' }],
-  name: [{ validator: checkName, min:3,trigger: 'blur' }],
-  id_number: [{ validator: checkuserId, min:7,trigger: 'blur' }],
-  phone: [{ validator: checkphone, trigger: 'blur' }],
+  nombre_municipio: [{ validator: checkName, trigger: 'blur' }],
+  codigo_municipio: [{ validator: checkIsoCode, min: 7, trigger: 'blur' }],
+  poblacion: [{ validator: checkPopulation, trigger: 'blur' }],
+  es_capital: [{ validator: check_is_capital, trigger: 'blur' }],
+  region_id: [{ validator: check_region, trigger: 'blur' }]
 })
 
 const submitForm = (formEl: FormInstance | undefined) => {
@@ -346,18 +224,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
         }, 1000);
       const formData = new FormData()
 
-      formData.append('name', ruleForm.name)
-      formData.append('age', ruleForm.date1.toString())
-      formData.append('email', ruleForm.email)
-      formData.append('globalScore', ruleForm.globalScore.toString())
-      formData.append('phone', ruleForm.phone.toString())
-      formData.append('password', ruleForm.pass)
-      formData.append('rol', ruleForm.rol)
-      formData.append('id_number', ruleForm.id_number)
-      formData.append('img', imageUrlToSend.value)
-      formData.append('region', ruleForm.region)
+      formData.append('nombre_municipio', ruleForm.nombre_municipio)
+      formData.append('codigo_municipio', ruleForm.codigo_municipio)
+      formData.append('poblacion', ruleForm.poblacion)
+      formData.append('es_capital', ruleForm.es_capital === 'true' ? 1 : 0)
+      formData.append('activo', ruleForm.activo === 1 ? true : false)
+      formData.append('region_id', ruleForm.region_id)
 
-      axios.post('http://127.0.0.1:8000/api/empleado', formData, {
+      axios.post('http://127.0.0.1:8000/api/municipio', formData, {
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -365,11 +239,16 @@ const submitForm = (formEl: FormInstance | undefined) => {
       .then(function (response) {
         ElMessage({
           showClose: true,
-          message: 'Nuevo colaborador creado correctamente',
-          type:'success'
+          message: 'Nuevo municipio creado correctamente',
+          type:'success',
+          duration: 3000
         })
-        loading.value = false
-        
+
+        setTimeout(() => {
+            loading.value = false
+        }, 1000);
+        console.log('Respuesta del servidor:', response.data);
+
       })
       .catch(function (error) {
         setTimeout(() => {
@@ -390,6 +269,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
   })
 }
 
+loading.value = false
+
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
@@ -403,19 +284,31 @@ watch(
   () => props.userToEdit,
   (newUser) => {
     if (newUser) {
-      ruleForm.name = newUser.name
-      ruleForm.email = newUser.email
-      ruleForm.id_number = newUser.id_number
-      ruleForm.globalScore = newUser.globalScore
-      ruleForm.phone = newUser.phone
-      ruleForm.pass = newUser.pass
-      ruleForm.rol = newUser.rol
-      ruleForm.region = newUser.region
-      ruleForm.date1 = newUser.date1
-      ruleForm.img = newUser.img
+      ruleForm.nombre_municipio = newUser.nombre_municipio
+      ruleForm.codigo_municipio = newUser.codigo_municipio
+      ruleForm.poblacion = newUser.poblacion
+      ruleForm.es_capital = newUser.es_capital
+      ruleForm.activo = newUser.activo
+      ruleForm.region_id = newUser.region_id
     }
   },
   {immediate:true}
+)
+
+watch(
+    () => ruleForm.region_id,
+    (newRegion, oldRegion) => {
+        if (newRegion !== oldRegion) {
+            cargar_regiones()
+        }
+    }
+)
+
+watch(
+    () => ruleForm.activo,
+    (newActivo, oldActivo) => {
+        console.log('El estado de "activo" ha cambiado a: ', newActivo)
+    }
 )
 </script>
 

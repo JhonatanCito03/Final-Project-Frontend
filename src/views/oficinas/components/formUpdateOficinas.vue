@@ -25,7 +25,7 @@
               style="width: 90%; margin-left: auto; margin-right: auto; font-size: large;"
               
               >
-                  <el-table-column prop="nombre_pais" label="Nombre" width="260" />
+                  <el-table-column prop="nombre_region" label="Nombre" width="260" />
                   <el-table-column prop="codigo_iso" label="Código ISO" width="280" />
                   <el-table-column prop="prefijo_telefonico" label="Prefijo Telefónico" width="140"  />
                   <el-table-column prop="moneda" label="Moneda" width="160" />
@@ -47,7 +47,7 @@
                     link 
                     type="danger" 
                     :icon="Delete"
-                    @click="handleDelete(row.id,row.nombre_pais)"
+                    @click="handleDelete(row.id,row.nombre_region)"
                     ></el-button>
                     </template>
                   </el-table-column>
@@ -59,17 +59,17 @@
 
 <script lang="ts" setup>
   import {Edit,Delete} from '@element-plus/icons-vue'
-  import LayoutMain from '../../components/LayoutMain.vue';
-  import Formulario from "../../components/formulario.vue";
-  import formPaises from './components/formPaises.vue';
-  import formUpdatePaises from './components/formUpdatePaises.vue';
-  import Header from '../../components/Header.vue';
+  import LayoutMain from '../../../components/LayoutMain.vue';
+  import Formulario from "../../../components/formulario.vue";
+  import formRegiones from './components/formRegiones.vue';
+  import formUpdateRegiones from './components/formUpdateRegiones.vue';
+  import Header from '../../../components/Header.vue';
   import axios from 'axios'
   import {ref,onMounted, h} from 'vue'
   import { ElMessageBox, ElMessage } from 'element-plus';
   import { useRouter } from 'vue-router'
   import { computed } from 'vue';
-  import {useDrawerStore} from '../../components/stores/useDrawerStore'
+  import {useDrawerStore} from '../../../components/stores/useDrawerStore'
   //import is_logged from '../../../userInfo';
 
   function formatDay(row, column, cellValue) {
@@ -121,13 +121,13 @@
 
 //table
 
-const handleDelete = (id:number, nombre_pais:string) => {
-  console.log('eliminar pais id: ', id, nombre_pais) 
+const handleDelete = (id:number, nombre_region:string) => {
+  console.log('eliminar pais id: ', id, nombre_region) 
   try{
   //prueba msg
     ElMessageBox.confirm(
-    `Esta usted seguro de que quiere eliminar a ${nombre_pais} con id:${id}`,
-    `Eliminar pais ${nombre_pais}`,
+    `Esta usted seguro de que quiere eliminar a ${nombre_region} con id:${id}`,
+    `Eliminar pais ${nombre_region}`,
     {
       confirmButtonText: 'Si, estoy segur@',
       cancelButtonText: 'No, no quiero eliminar',
@@ -136,7 +136,7 @@ const handleDelete = (id:number, nombre_pais:string) => {
   )
     .then(() => {
       ElMessage({
-        type: `Usuario ${nombre_pais} eliminado con exito`,
+        type: `Usuario ${nombre_region} eliminado con exito`,
         message: `${id} eliminado con exito`,
       })
       axios.delete(`http://127.0.0.1:8000/api/pais/${id}`)

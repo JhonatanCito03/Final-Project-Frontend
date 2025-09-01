@@ -1,0 +1,14 @@
+{
+"moneda":[
+  { "value": "COP", "label": "COP" },
+  { "value": "MXP", "label": "MXP" },
+  { "value": "PEN", "label": "PEN" },
+  { "value": "USD", "label": "USD" },
+  { "value": "EUR", "label": "EUR" },
+  { "value": "SRA", "label": "SRA" },
+  { "value": "CAD", "label": "CAD" },
+  { "value": "CLP", "label": "CLP" }
+]
+}
+
+

@@ -1,5 +1,5 @@
 <template>
-  <el-form
+    <el-form
     v-loading="loading"
     ref="ruleFormRef"
     style="max-width: 600px"
@@ -77,14 +77,19 @@ import { reactive, ref , watch} from 'vue'
 import { computed } from 'vue'
 import axios from 'axios'
 import type { FormInstance, FormRules } from 'element-plus'
-import {Delete,Download,ZoomIn} from '@element-plus/icons-vue' 
 import regions from '../../../components/generalData/regions.json'
-import coinType from '../../../components/generalData/coinType.json'
-import languages from '../../../components/generalData/languages.json'
+import positions from '../../../components/generalData/positions.json'
 import type {UploadUserFile } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import userInfo from '../../../../userInfo'
 
+import coinType from '../../../components/generalData/coinType.json'
+import languages from '../../../components/generalData/languages.json'
+import {Plus,Delete,ZoomIn,Download} from '@element-plus/icons-vue'
+import { id } from 'element-plus/es/locales.mjs'
+
+const user1PassRq = ref('')
 const loading = ref(false)
 
 const fileList = ref<UploadUserFile[]>([])
@@ -94,6 +99,9 @@ const dialogVisible = ref(false)
 const disabled = ref(false)
 
 const ruleFormRef = ref<FormInstance>()
+
+
+//form
 
 
 const checkName = (rule: any, value: String, callback: any) => {
@@ -154,19 +162,21 @@ const checkActive = (rule: any, value: any, callback: any) => {
   callback()
 }
 
+const props = defineProps({
+  pais: Object
+})
+
+//console.log(props.pais.id)
+
 const ruleForm = reactive({
+  id: null as number | null,
   country_name: '',
-  phonePrefix: Number,
+  phonePrefix: 0,
   moneda: '',
   idioma:'',
   ISO:'',
   activo:''
 })
-
-
-const statusSwitch = ref(false)
-
-
 
 const rules = reactive<FormRules<typeof ruleForm>>({
   country_name: [{ validator: checkName, trigger: 'blur' }],
@@ -177,88 +187,65 @@ const rules = reactive<FormRules<typeof ruleForm>>({
   activo: [{ validator: checkActive, trigger: 'blur' }],
 })
 
+
+
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
+
   formEl.validate((valid) => {
-    if (valid) {
-      setTimeout(() => {
-          loading.value = true
-        }, 1000);
-      const formData = new FormData()
+    if(!valid) return
 
-      formData.append('nombre_pais', ruleForm.country_name)
-      formData.append('prefijo_telefonico', ruleForm.phonePrefix.toString())
-      formData.append('moneda', ruleForm.moneda)
-      formData.append('idioma_principal', ruleForm.idioma)
-      formData.append('codigo_iso', ruleForm.ISO)
-      formData.append('activo', ruleForm.activo.toString())
-
-      console.log('Datos del formulario:', formData)
-
-      axios.post('http://127.0.0.1:8000/api/pais', formData, {
-        headers: {
-          'Content-Type':'multipart/form-data'
-        }
-      })
-      .then(function (response) {
-        ElMessage({
-          showClose: true,
-          message: 'Nuevo país creado correctamente',
-          type:'success',
-          duration: 3000
-        })
-
-        setTimeout(() => {
-            loading.value = false
-        }, 1000);
-        console.log('Respuesta del servidor:', response.data);
-
-      })
-      .catch(function (error) {
-        setTimeout(() => {
-          loading.value = false
-        }, 1000);
-        console.log(error);
-        ElMessage({
-          showClose: true,
-          message: 'Error al cargar los datos. Verifique la informacion e intentelo de nuevo',
-        })
-      }
-    );
-
-
-    } else {
-      console.log('error submit!')
+    const dataToSend = {
+      country_name: ruleForm.country_name,
+      phonePrefix: ruleForm.phonePrefix,
+      moneda: ruleForm.moneda,
+      idioma: ruleForm.idioma,
+      ISO: ruleForm.ISO,
+      activo: ruleForm.activo
     }
+
+    console.log("ID que se envía:", ruleForm.id, dataToSend)
+
+    axios.patch(`http://127.0.0.1:8000/api/pais/${ruleForm.id}`, dataToSend)
+    .then((response) => {
+      console.log(`pais ${props.pais.name}, con el id ${ruleForm.id} actualizado`, response.data)
+      ElMessage.success('pais actualizado')
+    })
+    .catch((error) => {
+      console.error(`Error al actualizar a ${props.pais.name}, pais con el id ${ruleForm.id}`, error)
+      ElMessage.error('Error al actualizar')
+    })
   })
 }
-
-loading.value = false
 
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
 
-const props = defineProps<{
-  userToEdit: any
-}>()
-
 watch(
-  () => props.userToEdit,
-  (newUser) => {
-    if (newUser) {
-      ruleForm.country_name = newUser.country_name
-      ruleForm.phonePrefix = newUser.phonePrefix
-      ruleForm.moneda = newUser.moneda
-      ruleForm.idioma = newUser.idioma
-      ruleForm.ISO = newUser.ISO
-      ruleForm.activo = newUser.activo
+  () => props.pais,
+  (nuevoPais) => {
+    console.log("Pais que llega del padre:", nuevoPais) //pruebas para ver si realmente funciona
+    if (nuevoPais) {
+      Object.assign(ruleForm, {
+        id: nuevoPais.id,
+        country_name: nuevoPais.nombre_pais || '',
+        phonePrefix: nuevoPais.prefijo_telefonico || 0,
+        moneda: nuevoPais.moneda || '',
+        idioma: nuevoPais.idioma_principal || '',
+        ISO: nuevoPais.codigo_iso || '',
+        activo: nuevoPais.activo || ''
+      })
+
+      console.log("Formulario actualizado con los datos del país:", ruleForm)
     }
   },
-  {immediate:true}
+  { immediate: true }
 )
 </script>
+
+
 
 <style scoped>
 .container{
