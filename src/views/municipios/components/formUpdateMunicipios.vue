@@ -1,171 +1,99 @@
 <template>
-    <LayoutMain>
-      <template #slotLayout>
-          <Header   
-          :titulo="'Paises'"
-          :tituloBoton="'Crear país'"
-          :abrir="() => { is_create(); openDrawer(); }"
-          ></Header>
-          
-          <formulario
-          :drawerTitle = "drawerTitle"
-          >
-              <template #slotForm_drawer>
-                <formPaises v-if="is_create_btn"/>
-                <formUpdatePaises v-if="is_edit_btn" :user="paisSeleccionado"/>
-              </template>
+  <keep-alive>
+    <el-form
+    v-loading="loading"
+    ref="ruleFormRef"
+    style="max-width: 600px"
+    :model="ruleForm"
+    status-icon
+    :rules="rules"
+    label-width="auto"
+    class="demo-ruleForm"
+  >
 
-            
-          </formulario>
-          <!--Loading-->
-              <el-table 
-              v-loading="loading"
-              :data="tableData" 
-              stripe 
-              style="width: 90%; margin-left: auto; margin-right: auto; font-size: large;"
-              
-              >
-                  <el-table-column prop="nombre_region" label="Nombre" width="260" />
-                  <el-table-column prop="codigo_iso" label="Código ISO" width="280" />
-                  <el-table-column prop="prefijo_telefonico" label="Prefijo Telefónico" width="140"  />
-                  <el-table-column prop="moneda" label="Moneda" width="160" />
-                  <el-table-column prop="idioma_principal" label="Idioma Principal" width="140" />
 
-                  <!--Caso de estudio-->
-                  <el-table-column prop="activo" label="Activo?" width="120"/>
+  <!--Form-->
+  <el-form-item label="Nombre del municipio" prop="nombre_municipio">
+    <el-input v-model.string="ruleForm.nombre_municipio" type="text" />
+  </el-form-item>
 
-                  <el-table-column fixed="right" label="Acciones">
-                    <template #default="{ row }">
-                    <el-button 
-                    link 
-                    size="large" 
-                    :icon="Edit"
-                    @click="editarPais(row)"
-                    >                  
-                    </el-button>
-                    <el-button 
-                    link 
-                    type="danger" 
-                    :icon="Delete"
-                    @click="handleDelete(row.id,row.nombre_region)"
-                    ></el-button>
-                    </template>
-                  </el-table-column>
-              </el-table>
-              <el-button style="margin-left: auto; margin-right: auto; display: flex; margin-top: 10px;" @click="loadData">Recargar</el-button>
-      </template>
-    </LayoutMain>
+  <el-form-item label="Codigo identificador" prop="codigo_municipio">
+    <el-input v-model.string="ruleForm.codigo_municipio" type="text"/>
+  </el-form-item>
+
+  <!--Pruebas del formulario-->
+  <el-form-item label="Población" prop="poblacion">
+    <el-input v-model.number="ruleForm.poblacion" type="number"/>
+  </el-form-item>
+
+  <el-form-item label="Es capital?" prop="es_capital">
+      <el-select v-model="ruleForm.es_capital" placeholder="Seleccione una opción">
+        <el-option label="Sí, es capital" value="true" />
+        <el-option label="No, no es capital" value="false" />
+      </el-select>
+    </el-form-item>
+
+    
+    <!--prueba2-->
+    <el-form-item label="Departamento al cual pertenece" prop="region_id">
+        <el-select v-model="ruleForm.region_id" placeholder="Seleccionar departamento">
+            <el-option
+            v-for="item in regions"
+            :key="item.id"
+            :label="item.nombre_region"
+            :value="item.id"
+            />
+        </el-select>
+    </el-form-item>
+    
+    <el-form-item label="¿Está activo?" prop="activo">
+      <el-input v-model="ruleForm.activo" disabled></el-input>
+    </el-form-item>
+
+    <!--Caso de estudio-->
+  
+    
+    <el-form-item>
+        <div class="container" style="display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;">
+            <el-button style="color: aliceblue; background-color: blueviolet;" @click="submitForm(ruleFormRef)">
+              Crear municipio
+            </el-button>
+            <el-button @click="resetForm(ruleFormRef)">Resetear formulario</el-button>
+        </div>      
+    </el-form-item>
+  </el-form>
+  </keep-alive>
 </template>
 
 <script lang="ts" setup>
-  import {Edit,Delete} from '@element-plus/icons-vue'
-  import LayoutMain from '../../../components/LayoutMain.vue';
-  import Formulario from "../../../components/formulario.vue";
-  import formRegiones from './components/formRegiones.vue';
-  import formUpdateRegiones from './components/formUpdateRegiones.vue';
-  import Header from '../../../components/Header.vue';
-  import axios from 'axios'
-  import {ref,onMounted, h} from 'vue'
-  import { ElMessageBox, ElMessage } from 'element-plus';
-  import { useRouter } from 'vue-router'
-  import { computed } from 'vue';
-  import {useDrawerStore} from '../../../components/stores/useDrawerStore'
-  //import is_logged from '../../../userInfo';
-
-  function formatDay(row, column, cellValue) {
-  if (!cellValue) return ''
-  const date = new Date(cellValue)
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth()).padStart(2, '0')
-  const year = date.getFullYear()
-  return `${day}/${month}/${year}`
-
-  }
-
-  const paisSeleccionado = ref(null)
-
-  function editarPais(pais) {
-    is_create_btn.value = false
-    is_edit_btn.value = true
-    openDrawer()
-    paisSeleccionado.value = pais
-  }
-
-  const drawerStore = useDrawerStore()
+import { reactive, ref , watch} from 'vue'
+import { computed } from 'vue'
+import axios from 'axios'
+import type { FormInstance, FormRules } from 'element-plus'
+import positions from '../../../components/generalData/positions.json'
+import type {UploadUserFile } from 'element-plus'
+import type { UploadFile } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import userInfo from '../../../../userInfo'
+import {Plus,Delete,ZoomIn,Download} from '@element-plus/icons-vue'
+import { onMounted } from 'vue'
 
 
-  const openDrawer = () => {
-    drawerStore.openDrawer()
-  }
 
-  const is_create_btn = ref(true)
-  const is_edit_btn = ref(false)
+onMounted(() => {
+  loadRegions()
+  cargar_regiones()
+})
 
-  function is_create(){
-    is_create_btn.value = true
-    is_edit_btn.value = false
-  }
-  function is_edit(){
-    is_create_btn.value = false
-    is_edit_btn.value = true
-  }
+const regions = ref([])
 
-  const drawerTitle = computed(() => is_create_btn.value == true ? 'Creación de Países' : 'Actualización de Países')
-
-  const router = useRouter()
- 
-
-  const loading = ref(true)
-  const tableData = ref([])
-  const loaded = ref(true)
-
-//table
-
-const handleDelete = (id:number, nombre_region:string) => {
-  console.log('eliminar pais id: ', id, nombre_region) 
-  try{
-  //prueba msg
-    ElMessageBox.confirm(
-    `Esta usted seguro de que quiere eliminar a ${nombre_region} con id:${id}`,
-    `Eliminar pais ${nombre_region}`,
-    {
-      confirmButtonText: 'Si, estoy segur@',
-      cancelButtonText: 'No, no quiero eliminar',
-      type: 'warning',
-    }
-  )
-    .then(() => {
-      ElMessage({
-        type: `Usuario ${nombre_region} eliminado con exito`,
-        message: `${id} eliminado con exito`,
-      })
-      axios.delete(`http://127.0.0.1:8000/api/pais/${id}`)
-      .then((response)=>{console.log(response, 'eliminado', id)})
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'warning',
-        message: 'No se elimino el usuario',
-      })
-    })
-  }
-  catch{}
-  finally{
-
-  }
-}
-
-
-  function loadData(){
-    try {
-    loading.value = true
-      axios.get('http://127.0.0.1:8000/api/pais')
+const loadRegions = () => {
+  axios.get('http://127.0.0.1:8000/api/region')
     .then(response => {
-        tableData.value = []
-        response.data.data.forEach(pais => {
-          tableData.value.push(pais)
+        regions.value = []
+        response.data.lista.forEach(region => {
+          regions.value.push(region)
         });
-        console.log(tableData.value)
     })
     .catch(error => {
       ElMessageBox({
@@ -174,43 +102,193 @@ const handleDelete = (id:number, nombre_region:string) => {
           h('span', null, 'Hubo un problema cargando los datos, por favor intentelo de nuevo')
         ])
       })
-      .then(() => {
-      router.push('/')
-      }) 
     })
-    } catch(error){
-      console.log(error)
-    } finally {
-    loading.value = false
-    loaded.value = true
-    }
+}
+
+
+
+
+const loading = ref(false)
+
+
+const ruleFormRef = ref<FormInstance>()
+
+
+const checkName = (rule: any, value: String, callback: any) => {
+  if (!value) {
+    return callback(new Error('Por favor ingrese el nombre del municipio'))
   }
- 
-  onMounted(async () => {
-    loadData()
+  else if (value.length < 3 || value.length > 50) {
+    callback(new Error('El nombre del municipio debe ser de 3 a 50 caracteres'))
+  } 
+  else {
+      callback()
+  }
+}
+
+const checkIsoCode = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value.length < 1 || value.length > 4) {
+        callback(new Error('Debe ingresar un valor válido'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+const checkPopulation = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value < 5000 || value > 20000000) {
+        callback(new Error('Los valores deben estar entre 5000 y 20000000'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+const check_is_capital = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value === '' || value === null) {
+        callback(new Error('Este campo es obligatorio'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+const check_region = (rule: any, value: any, callback: any) => {
+    setTimeout(() => {
+        if (value === '' || value === null) {
+        callback(new Error('Seleccione un departamento'))
+        } 
+        else {
+            callback()
+        }
+    }, 1000)
+}
+
+
+
+
+
+const ruleForm = reactive({
+  nombre_municipio: '',
+  codigo_municipio: '',
+  poblacion: '',
+  es_capital: '',
+  activo: '',
+  region_id: ''
+})
+
+const is_region_active = ref('')
+
+function cargar_regiones() {
+    axios.get(`http://127.0.0.1:8000/api/region/${ruleForm.region_id}`)
+    .then(response => {
+        if (response.data.data) {
+            is_region_active.value = response.data.data.activo
+            
+            if (is_region_active.value === 'Si') {
+                ruleForm.activo = 'Si'
+            } else {
+                ruleForm.activo = 'No'
+            }
+        } else {
+            console.warn('La respuesta de la API no contiene la propiedad "activo".', response.data)
+            ruleForm.activo = ''
+        }
+    }).catch(error => {
+        console.error('Error al cargar los países:', error);
+    });
+}
+
+
+
+
+const rules = reactive<FormRules<typeof ruleForm>>({
+  nombre_municipio: [{ validator: checkName, trigger: 'blur' }],
+  codigo_municipio: [{ validator: checkIsoCode, min: 7, trigger: 'blur' }],
+  poblacion: [{ validator: checkPopulation, trigger: 'blur' }],
+  es_capital: [{ validator: check_is_capital, trigger: 'blur' }],
+  region_id: [{ validator: check_region, trigger: 'blur' }]
+})
+
+const props = defineProps({
+  user: Object
+})
+
+
+
+const statusSwitch = ref(false)
+
+
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      setTimeout(() => {
+          loading.value = true
+        }, 1000);
+      const formData = new FormData()
+
+      formData.append('nombre_municipio', ruleForm.nombre_municipio)
+      formData.append('codigo_municipio', ruleForm.codigo_municipio)
+      formData.append('poblacion', ruleForm.poblacion)
+      formData.append('es_capital', ruleForm.es_capital === 'true' ? 1 : 0)
+      formData.append('activo', ruleForm.activo)
+      formData.append('region_id', ruleForm.region_id)
+
+    axios.patch(`http://127.0.0.1:8000/api/municipio/${props.user.id}`, formData)
+    .then((response) => {
+      console.log(`Municipio ${props.user.nombre_municipio}, con el id ${props.user.id} actualizado`, response.data)
+      ElMessage.success('Municipio actualizado')
+      loading.value = false
+    })
+    .catch((error) => {
+      console.error(`Error al actualizar a ${props.user.nombre_municipio}, municipio con el id ${props.user.id}`, error)
+      ElMessage.error('Error al actualizar')
+      loading.value = false
+    })
+  } else {
+      console.log('error submit!!')
+      return false
+    }
   })
+}
 
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.resetFields()
+}
 
+watch(
+  () => props.user,
+  (nuevoMunicipio) => {
+    if (nuevoMunicipio) {
+      Object.assign(ruleForm, {
+        nombre_municipio: nuevoMunicipio.nombre_municipio,
+        codigo_municipio: nuevoMunicipio.codigo_municipio || '',
+        poblacion: nuevoMunicipio.poblacion || '',
+        es_capital: nuevoMunicipio.es_capital || '',
+        region_id: nuevoMunicipio.region_id || ''
+      })
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped>
-body{
-  margin: 0;
+.container{
+  display: flex;
+  justify-content: center;
 }
-.el-table{
-    color: rgb(0, 0, 0);
-}
-.el-table > label{
-    width: 100px;
-    color: rgb(0, 0, 0);
-}
-.imageUpload{
-  text-decoration: underline;
-  text-align: center;
-  margin-top: -30px;
-  margin-bottom: 10px;
-}
-.example-showcase .el-loading-mask {
-  z-index: 9;
+
+.preview-image{
+  max-width: 500px;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
 }
 </style>

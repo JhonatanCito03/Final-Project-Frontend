@@ -17,18 +17,14 @@
             <template #title>
             <span><el-icon><User /></el-icon>Personales</span>
             </template>
-            <el-menu-item index="/metas?captacion_index"><el-icon><Money/></el-icon>Metas de captación</el-menu-item>
-            <el-menu-item index="/metas?colocacion_index"><el-icon><Connection/></el-icon>Metas de colocación</el-menu-item>
-            <el-menu-item index="/metas?mixtas_index"><el-icon><Stamp/></el-icon> Metas clasificación mixta</el-menu-item>
+            <el-menu-item index="/metas"><el-icon><Money/></el-icon>Gestion de metas</el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="0-2">
             <template #title>
             <span><el-icon><Place/></el-icon>Generales</span>
             </template>
-            <el-menu-item index="/"><el-icon><Money/></el-icon>Metas de captación nivel.{{ userInfo.userInfo.region }}</el-menu-item>
-            <el-menu-item index="/"><el-icon><Connection/></el-icon>Metas de colocación nivel.{{ userInfo.userInfo.region }}</el-menu-item>
-            <el-menu-item index="/"><el-icon><Stamp/></el-icon> Metas clasificación mixta nivel.{{ userInfo.userInfo.region }}</el-menu-item>
+            <el-menu-item index="/"><el-icon><Money/></el-icon>Metas de nivel.{{ userInfo.userInfo.region }}</el-menu-item>
           </el-sub-menu>
 
 
@@ -67,13 +63,7 @@
             <span>Sistema de ranking general</span>
             </template>
             <el-menu-item index="r_empleados"><el-icon><Search /></el-icon>Ranking Empleados</el-menu-item>
-            <el-menu-item index="Cargos"><el-icon><Search /></el-icon>Ranking Cargos</el-menu-item>
-            <el-menu-item index="Paises"><el-icon><Search /></el-icon>Ranking Paises</el-menu-item>
-            <el-menu-item index="Regiones"><el-icon><Search /></el-icon>Ranking Regiones</el-menu-item>
-            <el-menu-item index="Departamentos"><el-icon><Search /></el-icon>Ranking Departamentos</el-menu-item>
-            <el-menu-item index="Oficinas"><el-icon><Search /></el-icon>Ranking Oficinas</el-menu-item>
-            <el-menu-item index="Municipios"><el-icon><Search /></el-icon>Ranking Municipios</el-menu-item>
-          </el-sub-menu>
+           </el-sub-menu>
         </el-sub-menu>
 
 

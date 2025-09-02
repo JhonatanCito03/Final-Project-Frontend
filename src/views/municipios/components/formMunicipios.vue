@@ -182,7 +182,6 @@ function cargar_regiones() {
     .then(response => {
         if (response.data.data) {
             is_region_active.value = response.data.data.activo
-            console.log('Datos de la region: ' + JSON.stringify(response.data.data.activo))
             
             if (is_region_active.value === 'Si') {
                 ruleForm.activo = 'Si'
@@ -191,7 +190,6 @@ function cargar_regiones() {
             }
         } else {
             console.warn('La respuesta de la API no contiene la propiedad "activo".', response.data)
-            console.log('Datos de la region: ' + JSON.stringify(response.data.data))
             ruleForm.activo = ''
         }
     }).catch(error => {
@@ -242,14 +240,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
         setTimeout(() => {
             loading.value = false
         }, 1000);
-        console.log('Respuesta del servidor:', response.data);
 
       })
       .catch(function (error) {
         setTimeout(() => {
           loading.value = false
         }, 1000);
-        console.log(error);
         ElMessage({
           showClose: true,
           message: 'Error al cargar los datos. Verifique la informacion e intentelo de nuevo',

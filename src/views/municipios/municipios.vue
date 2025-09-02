@@ -138,7 +138,6 @@ import { row } from '@primeuix/themes/aura/datatable';
 //table
 
 const handleDelete = (id:number, nombre_region:string) => {
-  console.log('eliminar region id: ', id, nombre_region) 
   try{
   //prueba msg
     ElMessageBox.confirm(
@@ -185,7 +184,6 @@ function loadData() {
                         tableData.value.push(municipio)
                     });
                 }
-                console.log( 'Table data: '+JSON.stringify(tableData.value))
             })
             .catch(error => {
                 if (error.response && error.response.status !== 404) {
@@ -221,7 +219,6 @@ function loadRegions() {
         id: p.id,
         nombre_region: p.nombre_region
       }))
-      console.log('Regiones cargadas:', regions.value)
     })
 
     .catch(error => {
@@ -233,7 +230,6 @@ function getRegionName(region_id: number|string) {
   const region = regions.value.find(
     c => String(c.id) === String(region_id)
   )
-  console.log('Region encontrada:', region)
   return region ? region.nombre_region : 'Desconocido'
 }
 

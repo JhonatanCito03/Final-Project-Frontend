@@ -136,7 +136,6 @@
 //table
 
 const handleDelete = (id:number, nombre_oficina:string) => {
-  console.log('eliminar region id: ', id, nombre_oficina) 
   try{
   //prueba msg
     ElMessageBox.confirm(
@@ -183,7 +182,6 @@ function loadData() {
                         tableData.value.push(oficina)
                     });
                 }
-                console.log(tableData.value)
             })
             .catch(error => {
                 if (error.response && error.response.status !== 404) {
@@ -220,7 +218,6 @@ function loadMunicipios() {
         id: p.id,
         nombre_municipio: p.nombre_municipio
       }))
-      console.log('Municipios cargados:', municipios.value)
     })
 
     .catch(error => {
@@ -232,7 +229,6 @@ function getMunicipioName(municipio_id: number|string) {
   const municipio = municipios.value.find(
     c => String(c.id) === String(municipio_id)
   )
-  console.log('Municipio encontrado:', municipio)
   return municipio ? municipio.nombre_municipio : 'Desconocido'
 }
 
@@ -249,7 +245,6 @@ function loadEncargados() {
         id: p.id,
         nombre_encargado: p.name
       }))
-      console.log('Encargados cargados:', encargados.value)
     })
 
     .catch(error => {
@@ -261,7 +256,6 @@ function getEncargadoName(encargado_id: number|string) {
   const encontrado = encargados.value.find(
     c => String(c.id) === String(encargado_id)
   )
-  console.log('Encargado encontrado:', encontrado)
   return encontrado ? encontrado.nombre_encargado : 'Desconocido'
 }
 

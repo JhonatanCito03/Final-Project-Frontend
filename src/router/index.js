@@ -7,6 +7,7 @@ import Paises from '../views/Paises/paises.vue';
 import Regiones from '../views/Regiones/regiones.vue';
 import Municipios from '../views/Municipios/municipios.vue';
 import Oficinas from '../views/Oficinas/Oficinas.vue';
+import metas from '../views/Metas/metas.vue';
 
 
 
@@ -43,6 +44,11 @@ const routes = [
         path:'/oficinas',
         name: 'oficinas',
         component:Oficinas
+    },
+    {
+        path:'/metas',
+        name: 'metas',
+        component:metas
     }
 ]
 
