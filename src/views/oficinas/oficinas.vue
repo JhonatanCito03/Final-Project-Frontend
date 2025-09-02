@@ -34,15 +34,23 @@
 
                 <el-table-column label="Municipio" width="180">
                     <template #default="{ row }">
-                        {{ getOficinaName(row.oficina_id) }}
+                        {{ getMunicipioName(row.municipio_id) }}
                     </template>
                 </el-table-column>
 
 
-                 <el-table-column label="Horarios de atención" width="180">
-                    <el-button plain @click="ver_horarios(row)">Ver horarios</el-button>
+                 <el-table-column prop="horario_atencion" label="Horarios de atención" width="180">
+                    <template #default="{ row }">
+                      <el-button @click="ver_horarios(row)">Ver horarios</el-button>
+                    </template>
                 </el-table-column>
 
+
+                <el-table-column prop="encargado" label="Director" width="180">
+                    <template #default="{ row }">
+                        {{ getEncargadoName(row.responsable_id) }}
+                    </template>
+                </el-table-column>
 
                   <el-table-column fixed="right" label="Acciones">
                     <template #default="{ row }">
@@ -57,7 +65,7 @@
                     link 
                     type="danger" 
                     :icon="Delete"
-                    @click="handleDelete(row.id,row.nombre_Region)"
+                    @click="handleDelete(row.id,row.nombre_oficina)"
                     ></el-button>
                     </template>
                   </el-table-column>
@@ -112,7 +120,7 @@
     is_edit_btn.value = true
   }
 
-  const drawerTitle = computed(() => is_create_btn.value == true ? 'Creación de Regiones' : 'Actualización de Regiones')
+  const drawerTitle = computed(() => is_create_btn.value == true ? 'Creación de Oficinas' : 'Actualización de Oficinas')
 
   const router = useRouter()
  
@@ -122,31 +130,18 @@
   const loaded = ref(true)
 
 
-  //mensaje para boton horarios
-  const ver_horarios = (row) => {
-  ElMessageBox.alert('This is a message', 'Title', {
-    // if you want to disable its autofocus
-    // autofocus: false,
-    confirmButtonText: 'OK',
-    callback: (action: Action) => {
-      ElMessage({
-        type: 'info',
-        message: `action: ${action}`,
-      })
-    },
-  })
-}
+
 
 
 //table
 
-const handleDelete = (id:number, nombre_region:string) => {
-  console.log('eliminar region id: ', id, nombre_region) 
+const handleDelete = (id:number, nombre_oficina:string) => {
+  console.log('eliminar region id: ', id, nombre_oficina) 
   try{
   //prueba msg
     ElMessageBox.confirm(
-    `Esta usted seguro de que quiere eliminar a ${nombre_region} con id:${id}`,
-    `Eliminar region ${nombre_region}`,
+    `Esta usted seguro de que quiere eliminar a ${nombre_oficina} con id:${id}`,
+    `Eliminar region ${nombre_oficina}`,
     {
       confirmButtonText: 'Si, estoy segur@',
       cancelButtonText: 'No, no quiero eliminar',
@@ -155,10 +150,10 @@ const handleDelete = (id:number, nombre_region:string) => {
   )
     .then(() => {
       ElMessage({
-        type: `Región ${nombre_region} eliminada con exito`,
+        type: `Región ${nombre_oficina} eliminada con exito`,
         message: `${id} eliminado con exito`,
       })
-      axios.delete(`http://127.0.0.1:8000/api/municipio/${id}`)
+      axios.delete(`http://127.0.0.1:8000/api/oficina/${id}`)
       .then((response)=>{console.log(response, 'eliminado', id)})
     })
     .catch(() => {
@@ -180,12 +175,12 @@ const handleDelete = (id:number, nombre_region:string) => {
 function loadData() {
     try {
         loading.value = true
-        axios.get('http://127.0.0.1:8000/api/municipio')
+        axios.get('http://127.0.0.1:8000/api/oficina')
             .then(response => {
                 tableData.value = []
                 if (response.data.data && response.data.data.length > 0) {
-                    response.data.data.forEach(municipio => {
-                        tableData.value.push(municipio)
+                    response.data.data.forEach(oficina => {
+                        tableData.value.push(oficina)
                     });
                 }
                 console.log(tableData.value)
@@ -210,21 +205,22 @@ function loadData() {
 }
   onMounted(async () => {
     loadData()
-    loadRegions()
+    loadMunicipios()
+    loadEncargados()
   })
 
   // === PAISES ===
-const regions = ref<{ id: number; nombre_region: string }[]>([])
+const municipios = ref<{ id: number; nombre_municipio: string }[]>([])
 
-function loadRegions() {
-  axios.get('http://127.0.0.1:8000/api/region')
+function loadMunicipios() {
+  axios.get('http://127.0.0.1:8000/api/municipio')
     .then(response => {
       const lista = response.data.data || response.data.lista || []
-      regions.value = lista.map((p: any) => ({
+      municipios.value = lista.map((p: any) => ({
         id: p.id,
-        nombre_region: p.nombre_region
+        nombre_municipio: p.nombre_municipio
       }))
-      console.log('Regiones cargadas:', regions.value)
+      console.log('Municipios cargados:', municipios.value)
     })
 
     .catch(error => {
@@ -232,15 +228,52 @@ function loadRegions() {
     })
 }
 
-function getOficinaName(oficina_id: number|string) {
-  const region = regions.value.find(
-    c => String(c.id) === String(oficina_id)
+function getMunicipioName(municipio_id: number|string) {
+  const municipio = municipios.value.find(
+    c => String(c.id) === String(municipio_id)
   )
-  console.log('Region encontrada:', region)
-  return region ? region.nombre_region : 'Desconocido'
+  console.log('Municipio encontrado:', municipio)
+  return municipio ? municipio.nombre_municipio : 'Desconocido'
 }
 
 
+
+  // === Encargados ===
+const encargados = ref<{ id: number; nombre_encargado: string }[]>([])
+
+function loadEncargados() {
+  axios.get('http://127.0.0.1:8000/api/empleado')
+    .then(response => {
+      const lista = response.data.data || response.data.empleado || []
+      encargados.value = lista.map((p: any) => ({
+        id: p.id,
+        nombre_encargado: p.name
+      }))
+      console.log('Encargados cargados:', encargados.value)
+    })
+
+    .catch(error => {
+        console.error('Error al cargar encargados:', error)
+    })
+}
+
+function getEncargadoName(encargado_id: number|string) {
+  const encontrado = encargados.value.find(
+    c => String(c.id) === String(encargado_id)
+  )
+  console.log('Encargado encontrado:', encontrado)
+  return encontrado ? encontrado.nombre_encargado : 'Desconocido'
+}
+
+const ver_horarios = (row: any) => {
+  ElMessageBox.alert(
+    `Horarios de atención para la oficina "${row.nombre_oficina}":\n\n${row.horario_atencion}`, 
+    'Horarios',
+    {
+      confirmButtonText: 'OK',
+    }
+  )
+}
 
 
 </script>

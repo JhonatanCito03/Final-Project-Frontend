@@ -55,7 +55,7 @@
     <el-form-item>
         <div class="container" style="display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;">
             <el-button style="color: aliceblue; background-color: blueviolet;" @click="submitForm(ruleFormRef)">
-              Crear País
+              Crear municipio
             </el-button>
             <el-button @click="resetForm(ruleFormRef)">Resetear formulario</el-button>
         </div>      
@@ -89,8 +89,6 @@ const loadRegions = () => {
         response.data.lista.forEach(region => {
           regions.value.push(region)
         });
-
-        console.log('regiones cargas 101: ' + regions.value);
     })
     .catch(error => {
       ElMessageBox({
@@ -107,11 +105,6 @@ const loadRegions = () => {
 
 const loading = ref(false)
 
-const fileList = ref<UploadUserFile[]>([])
-
-const dialogImageUrl = ref('')
-const dialogVisible = ref(false)
-const disabled = ref(false)
 
 const ruleFormRef = ref<FormInstance>()
 
@@ -185,25 +178,27 @@ const ruleForm = reactive({
 const is_region_active = ref('')
 
 function cargar_regiones() {
-
     axios.get(`http://127.0.0.1:8000/api/region/${ruleForm.region_id}`)
     .then(response => {
-        is_region_active.value = response.data.data.activo
-
-        
-        if(is_region_active.value === 'Si'){
-            ruleForm.activo = 'Si'
+        if (response.data.data) {
+            is_region_active.value = response.data.data.activo
+            console.log('Datos de la region: ' + JSON.stringify(response.data.data.activo))
+            
+            if (is_region_active.value === 'Si') {
+                ruleForm.activo = 'Si'
+            } else {
+                ruleForm.activo = 'No'
+            }
         } else {
-            ruleForm.activo = 'No'
+            console.warn('La respuesta de la API no contiene la propiedad "activo".', response.data)
+            console.log('Datos de la region: ' + JSON.stringify(response.data.data))
+            ruleForm.activo = ''
         }
     }).catch(error => {
-      console.error('Error al cargar los países:', error);
+        console.error('Error al cargar los países:', error);
     });
 }
 
-
-
-const statusSwitch = ref(false)
 
 
 
@@ -228,7 +223,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       formData.append('codigo_municipio', ruleForm.codigo_municipio)
       formData.append('poblacion', ruleForm.poblacion)
       formData.append('es_capital', ruleForm.es_capital === 'true' ? 1 : 0)
-      formData.append('activo', ruleForm.activo === 1 ? true : false)
+      formData.append('activo', ruleForm.activo)
       formData.append('region_id', ruleForm.region_id)
 
       axios.post('http://127.0.0.1:8000/api/municipio', formData, {
@@ -307,7 +302,16 @@ watch(
 watch(
     () => ruleForm.activo,
     (newActivo, oldActivo) => {
-        console.log('El estado de "activo" ha cambiado a: ', newActivo)
+        if (newActivo !== oldActivo) {
+            if (ruleForm.activo === 'No') {
+                ElMessage({
+                    showClose: true,
+                    message: 'El municipio no puede estar activo si el departamento al que pertenece está inactivo',
+                    type:'warning',
+                    duration: 5000
+                })
+            }
+        }
     }
 )
 </script>

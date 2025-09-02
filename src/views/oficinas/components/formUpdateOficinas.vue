@@ -2,8 +2,8 @@
     <LayoutMain>
       <template #slotLayout>
           <Header   
-          :titulo="'Paises'"
-          :tituloBoton="'Crear país'"
+          :titulo="'Oficinas'"
+          :tituloBoton="'Crear oficina'"
           :abrir="() => { is_create(); openDrawer(); }"
           ></Header>
           

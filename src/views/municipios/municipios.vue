@@ -41,10 +41,14 @@
 
                   <!--Caso de estudio-->
                 <el-table-column 
-                    prop="activo"
-                    label="Activo?"
-                    width="120"
-                />
+                  prop="activo"
+                  label="Activo?"
+                  width="120"
+                >
+                  <template #default="{ row }">
+                    {{ row.activo === 'Si' ? 'Sí' : 'No' }}
+                  </template>
+                </el-table-column>
 
 
                 <el-table-column label="Departamento" width="180">
@@ -122,7 +126,7 @@ import { row } from '@primeuix/themes/aura/datatable';
     is_edit_btn.value = true
   }
 
-  const drawerTitle = computed(() => is_create_btn.value == true ? 'Creación de Regiones' : 'Actualización de Regiones')
+  const drawerTitle = computed(() => is_create_btn.value == true ? 'Creación de Municipios' : 'Actualización de Municipios')
 
   const router = useRouter()
  
@@ -181,7 +185,7 @@ function loadData() {
                         tableData.value.push(municipio)
                     });
                 }
-                console.log(tableData.value)
+                console.log( 'Table data: '+JSON.stringify(tableData.value))
             })
             .catch(error => {
                 if (error.response && error.response.status !== 404) {

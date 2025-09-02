@@ -2,7 +2,6 @@
   <el-form
     v-loading="loading"
     ref="ruleFormRef"
-    style="max-width: 600px"
     :model="ruleForm"
     status-icon
     :rules="rules"
@@ -76,6 +75,19 @@
             placeholder="Ingrese el horario de atención de la oficina"
         />
     </el-form-item>
+
+
+    <!--pruebas empleados-->
+    <el-form-item label="Empleado a cargo de la oficina" prop="responsable_id">
+        <el-select v-model="ruleForm.responsable_id" placeholder="Seleccionar empleado">
+            <el-option
+            v-for="item in empleado"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+            />
+        </el-select>
+    </el-form-item>
     
     <el-form-item label="¿Está activo?" prop="activo">
       <el-input v-model="ruleForm.activo" disabled></el-input>
@@ -87,7 +99,7 @@
     <el-form-item>
         <div class="container" style="display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;">
             <el-button style="color: aliceblue; background-color: blueviolet;" @click="submitForm(ruleFormRef)">
-              Crear País
+              Crear oficina
             </el-button>
             <el-button @click="resetForm(ruleFormRef)">Resetear formulario</el-button>
         </div>      
@@ -106,10 +118,12 @@ import languages from '../../../components/generalData/languages.json'
 import type {UploadUserFile } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import Empleados from '../../Empleados/Empleados.vue'
 
 
 onMounted(() => {
   loadMunicipies()
+  cargar_empleados()
 })
 
 const municipios = ref([])
@@ -118,7 +132,7 @@ const loadMunicipies = () => {
   axios.get('http://127.0.0.1:8000/api/municipio')
     .then(response => {
         municipios.value = []
-        response.data.lista.forEach(municipio => {
+        response.data.data.forEach(municipio => {
           municipios.value.push(municipio)
         });
 
@@ -138,12 +152,6 @@ const loadMunicipies = () => {
 
 
 const loading = ref(false)
-
-const fileList = ref<UploadUserFile[]>([])
-
-const dialogImageUrl = ref('')
-const dialogVisible = ref(false)
-const disabled = ref(false)
 
 const ruleFormRef = ref<FormInstance>()
 
@@ -192,7 +200,7 @@ const checkPhone = (rule: any, value: any, callback: any) => {
     if (!value) {
       callback(new Error('El teléfono es obligatorio'))
     } else if (!telefonoRegex.test(value)) {
-      callback(new Error('El teléfono debe tener entre 7 y 10 dígitos numéricos'))
+      callback(new Error('El teléfono no debe ser de mas de 10 dígitos y no debe contener letras ni caracteres especiales'))
     } else {
       callback()
     }
@@ -200,21 +208,30 @@ const checkPhone = (rule: any, value: any, callback: any) => {
 }
 
 
+const checkEmail = (rule: any, value: any, callback: any) => {
+  setTimeout(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const check_region = (rule: any, value: any, callback: any) => {
+    if (!value) {
+      callback(new Error('El correo es obligatorio'))
+    } else if (!emailRegex.test(value)) {
+      callback(new Error('Ingrese un correo válido'))
+    } else {
+      callback()
+    }
+  }, 500)
+}
+
+const check_schedule = (rule: any, value: any, callback: any) => {
     setTimeout(() => {
         if (value === '' || value === null) {
-        callback(new Error('Seleccione un departamento'))
+        callback(new Error('Ingrese un horario de oficina'))
         } 
         else {
             callback()
         }
     }, 1000)
 }
-
-
-
-
 
 const ruleForm = reactive({
   nombre_oficina: '',
@@ -224,28 +241,49 @@ const ruleForm = reactive({
   email_contacto: '',
   horario_atencion: '',
   activo:'',
-  municipio_id: ''
+  municipio_id: '',
+  responsable_id: ''
 })
 
-const is_region_active = ref('')
+const is_municipio_active = ref('')
 
-function cargar_regiones() {
+function cargar_municipios() {
 
-    axios.get(`http://127.0.0.1:8000/api/region/${ruleForm.region_id}`)
+    axios.get(`http://127.0.0.1:8000/api/municipio/${ruleForm.municipio_id}`)
     .then(response => {
-        is_region_active.value = response.data.data.activo
+        is_municipio_active.value = response.data.data.activo
 
-        
-        if(is_region_active.value === 'Si'){
+        if(is_municipio_active.value === 'Si'){
             ruleForm.activo = 'Si'
         } else {
             ruleForm.activo = 'No'
         }
     }).catch(error => {
-      console.error('Error al cargar los países:', error);
+      console.error('Error al cargar los municipios:', error);
     });
 }
 
+
+
+//pruebas empleados
+
+const empleado = ref('')
+
+function cargar_empleados() {
+
+    axios.get(`http://127.0.0.1:8000/api/empleado/${ruleForm.responsable_id}`)
+     .then(response => {
+        empleado.value = []
+        response.data.empleado.forEach(emp => {
+          empleado.value.push(emp)
+        });
+
+        console.log('empleados cargados 101: ' + empleado.value);
+    })
+    .catch(error => {
+      console.error('Error al cargar los empleados:', error);
+    })
+}
 
 
 
@@ -258,10 +296,11 @@ const rules = reactive<FormRules<typeof ruleForm>>({
     { required: true, message: 'Por favor ingrese un teléfono', trigger: 'blur' },
     { validator: checkPhone, trigger: 'blur' }
   ],
-  email_contacto: [{ validator: check_region, trigger: 'blur' }],
-  horario_atencion: [{ validator: check_region, trigger: 'blur' }],
-  activo: [{ validator: check_region, trigger: 'blur' }],
-  municipio_id: [{ validator: check_region, trigger: 'blur' }]
+  email_contacto: [
+    { required: true, message: 'El correo es obligatorio', trigger: 'blur' },
+    { validator: checkEmail, trigger: ['blur', 'change'] }
+  ],
+  horario_atencion: [{ validator: check_schedule, trigger: 'blur' }]
 })
 
 const submitForm = (formEl: FormInstance | undefined) => {
@@ -273,14 +312,17 @@ const submitForm = (formEl: FormInstance | undefined) => {
         }, 1000);
       const formData = new FormData()
 
-      formData.append('nombre_municipio', ruleForm.nombre_municipio)
-      formData.append('codigo_municipio', ruleForm.codigo_municipio)
-      formData.append('poblacion', ruleForm.poblacion)
-      formData.append('es_capital', ruleForm.es_capital === 'true' ? 1 : 0)
-      formData.append('activo', ruleForm.activo === 1 ? true : false)
-      formData.append('region_id', ruleForm.region_id)
+      formData.append('nombre_oficina', ruleForm.nombre_oficina)
+      formData.append('codigo_oficina', ruleForm.codigo_oficina)
+      formData.append('direccion', ruleForm.direccion)
+      formData.append('telefono', ruleForm.telefono.toString())
+      formData.append('email_contacto', ruleForm.email_contacto)
+      formData.append('horario_atencion', ruleForm.horario_atencion.toString())
+      formData.append('activo', ruleForm.activo === 1 ? 1 : 0)
+      formData.append('responsable_id', ruleForm.responsable_id)
+      formData.append('municipio_id', Number(ruleForm.municipio_id))
 
-      axios.post('http://127.0.0.1:8000/api/municipio', formData, {
+      axios.post('http://127.0.0.1:8000/api/oficina', formData, {
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -288,7 +330,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       .then(function (response) {
         ElMessage({
           showClose: true,
-          message: 'Nuevo municipio creado correctamente',
+          message: 'Nueva oficina creada correctamente',
           type:'success',
           duration: 3000
         })
@@ -333,22 +375,23 @@ watch(
   () => props.userToEdit,
   (newUser) => {
     if (newUser) {
-      ruleForm.nombre_municipio = newUser.nombre_municipio
-      ruleForm.codigo_municipio = newUser.codigo_municipio
-      ruleForm.poblacion = newUser.poblacion
-      ruleForm.es_capital = newUser.es_capital
+      ruleForm.nombre_oficina = newUser.nombre_oficina
+      ruleForm.codigo_oficina = newUser.codigo_oficina
+      ruleForm.telefono = newUser.telefono
+      ruleForm.email_contacto = newUser.email_contacto
+      ruleForm.horario_atencion = newUser.horario_atencion
       ruleForm.activo = newUser.activo
-      ruleForm.region_id = newUser.region_id
+      ruleForm.municipio_id = newUser.municipio_id
     }
   },
   {immediate:true}
 )
 
 watch(
-    () => ruleForm.region_id,
-    (newRegion, oldRegion) => {
-        if (newRegion !== oldRegion) {
-            cargar_regiones()
+    () => ruleForm.municipio_id,
+    (newMunicipio, oldMunicipio) => {
+        if (newMunicipio !== oldMunicipio) {
+            cargar_municipios()
         }
     }
 )
