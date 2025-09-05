@@ -33,7 +33,7 @@
                   <el-table-column prop="globalScore" label="Puntaje global" width="100" />
                   <el-table-column prop="rol" label="Cargo en la empresa" width="160" />
                   <el-table-column prop="phone" label="Telefono" width="140" />
-                  <el-table-column prop="region" label="Región" width="120" />
+                  <el-table-column prop="id_oficina" label="Dependencia" width="120" />
                   <el-table-column fixed="right" label="Acciones" min-width="80">
                     <template #default="{ row }">
                     <el-button 

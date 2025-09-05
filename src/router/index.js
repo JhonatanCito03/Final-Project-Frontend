@@ -8,6 +8,9 @@ import Regiones from '../views/Regiones/regiones.vue';
 import Municipios from '../views/Municipios/municipios.vue';
 import Oficinas from '../views/Oficinas/Oficinas.vue';
 import metas from '../views/Metas/metas.vue';
+import tablaGeneral from '../views/Metas/tablaGeneral.vue';
+import nuevo_valor from '../views/creacion_valor/nuevo_valor.vue';
+import registro_ejecucion from '../views/registro_ejecucion/registro_ejecucion.vue';
 
 
 
@@ -49,7 +52,23 @@ const routes = [
         path:'/metas',
         name: 'metas',
         component:metas
+    },
+    {
+        path:'/nuevo_valor',
+        name: 'nuevo_valor',
+        component:nuevo_valor
+    },
+    {
+        path:'/tablaGeneral',
+        name: 'tablaGeneral',
+        component:tablaGeneral
+    },
+    {
+        path:'/registro_ejecucion',
+        name: 'registro_ejecucion',
+        component:registro_ejecucion
     }
+
 ]
 
 const router = createRouter({

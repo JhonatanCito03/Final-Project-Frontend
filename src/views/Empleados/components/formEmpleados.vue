@@ -131,16 +131,15 @@
       </el-select>
     </el-form-item>
 
-
-    <el-form-item label="Departamento" prop="region">
-      <el-select v-model="ruleForm.region" placeholder="Selecciona un departamento">
-        <el-option 
-        v-for="item in regions.departamentos"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        />
-      </el-select>
+    <el-form-item label="Oficinas disponibles">
+      <el-select v-model="oficinaSeleccionada" placeholder="Seleccionar una oficina" >
+              <el-option
+              v-for="(cantidad, oficina) in conteoOficinas"
+              :key="cantidad"
+              :label="oficina"
+              :value="oficina"
+              />
+        </el-select>
     </el-form-item>
 
      <el-form-item label="Acceso completo?" prop="delivery">
@@ -174,6 +173,7 @@ import positions from '../../../components/generalData/positions.json'
 import type {UploadUserFile } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import { onMounted } from 'vue'
 
 const loading = ref(false)
 
@@ -315,10 +315,38 @@ const ruleForm = reactive({
   phone: Number,
   rol:'',
   id_number:'',
-  region:'',
+  id_oficina:'',
   img:''
 })
 
+
+//nuevos valores
+
+const oficinaSeleccionada = ref('')
+
+const conteoOficinas = ref<Record<string, number>>({});
+
+function clasificacion_oficinas() {
+  axios.get("http://127.0.0.1:8000/api/oficina")
+    .then(response => {
+      const oficinas = response.data.data;
+
+      const conteo: Record<string, number> = {};
+
+      oficinas.forEach((oficina: any) => {
+          const oficinaId = oficina.nombre_oficina; // Ej: Medellin1, Bogota1, etc.
+          conteo[oficinaId] = (conteo[oficinaId] || 0) + 1;
+      });
+
+      conteoOficinas.value = conteo; // 👈 lo guardamos en la variable reactiva
+    })
+    .catch(error => {
+      console.error("Error al obtener oficinas:", error);
+    });
+}
+onMounted(() => {
+  clasificacion_oficinas();
+});
 
 const statusSwitch = ref(false)
 
@@ -341,9 +369,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      setTimeout(() => {
-          loading.value = true
-        }, 1000);
       const formData = new FormData()
 
       formData.append('name', ruleForm.name)
@@ -355,7 +380,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       formData.append('rol', ruleForm.rol)
       formData.append('id_number', ruleForm.id_number)
       formData.append('img', imageUrlToSend.value)
-      formData.append('region', ruleForm.region)
+      formData.append('id_oficina', oficinaSeleccionada.value)
 
       axios.post('http://127.0.0.1:8000/api/empleado', formData, {
         headers: {
@@ -368,8 +393,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
           message: 'Nuevo colaborador creado correctamente',
           type:'success'
         })
-        loading.value = false
-        
+        loading.value = false 
       })
       .catch(function (error) {
         setTimeout(() => {
@@ -410,7 +434,7 @@ watch(
       ruleForm.phone = newUser.phone
       ruleForm.pass = newUser.pass
       ruleForm.rol = newUser.rol
-      ruleForm.region = newUser.region
+      ruleForm.id_oficina = newUser.id_oficina
       ruleForm.date1 = newUser.date1
       ruleForm.img = newUser.img
     }

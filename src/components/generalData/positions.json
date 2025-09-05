@@ -1,11 +1,13 @@
 {
-"cargos":[
+  "cargos":[
   { "value": "presidente", "label": "Presidente" },
   { "value": "gerente_general", "label": "Gerente General" },
+  { "value": "direccion_general", "label": "Direccion general" },
   { "value": "gerente_zonal", "label": "Gerente Zonal" },
   { "value": "gerente_de_oficina", "label": "Gerente de Oficina" },
   { "value": "subgerente", "label": "Subgerente" },
   { "value": "director_comercial", "label": "Director Comercial" },
+  { "value": "director_de_oficina", "label": "Director de Oficina" },
   { "value": "director_financiero", "label": "Director Financiero" },
   { "value": "director_de_riesgos", "label": "Director de Riesgos" },
   { "value": "director_de_tecnologia_ti", "label": "Director de Tecnología (TI)" },

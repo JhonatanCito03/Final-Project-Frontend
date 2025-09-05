@@ -10,21 +10,23 @@
       <el-sub-menu index="0">
           <template #title>
             <el-icon><Histogram /></el-icon>
-            <span>Estadisticas</span>
+            <span>Gestion de metas</span>
           </template>
 
           <el-sub-menu index="0-1">
             <template #title>
-            <span><el-icon><User /></el-icon>Personales</span>
+            <span><el-icon><User /></el-icon>Progreso</span>
             </template>
-            <el-menu-item index="/metas"><el-icon><Money/></el-icon>Gestion de metas</el-menu-item>
+            <el-menu-item index="/metas"><el-icon><Money/></el-icon>Gestion de cumplimiento</el-menu-item>
+            <el-menu-item index="/tablaGeneral"><el-icon><Money/></el-icon>Tabla de ejecucion</el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="0-2">
             <template #title>
-            <span><el-icon><Place/></el-icon>Generales</span>
+            <span><el-icon><Place/></el-icon>Creacion</span>
             </template>
-            <el-menu-item index="/"><el-icon><Money/></el-icon>Metas de nivel.{{ userInfo.userInfo.region }}</el-menu-item>
+            <el-menu-item index="/nuevo_valor"><el-icon><connection/></el-icon>Registrar meta global (Presidente)</el-menu-item>
+            <el-menu-item index="/registro_ejecucion"><el-icon><Money/></el-icon>Registrar nueva ejecucion</el-menu-item>
           </el-sub-menu>
 
 
@@ -87,6 +89,8 @@
 <script lang="ts" setup>
 import {User,DataLine,List,Search,Tools,EditPen,Crop,Histogram,Stamp,Connection,Money,Place} from '@element-plus/icons-vue'
 import userInfo from '../../userInfo'
+
+console.log('user info: ', userInfo.userInfo)
 
 </script>
 
